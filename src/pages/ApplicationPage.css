@@ -1,0 +1,26 @@
+.application-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+.application-header {
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 28px 20px;
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-radius: 16px;
+  color: white;
+  margin-bottom: 24px;
+}
+
+.application-header h1 {
+  font-size: 1.7rem;
+  font-family: 'Merriweather', serif;
+  margin-bottom: 6px;
+}
+
+.application-header p {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}

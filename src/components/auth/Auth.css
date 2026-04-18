@@ -1,0 +1,68 @@
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.auth-logo .logo-icon { font-size: 2.5rem; }
+.auth-logo h1 { font-size: 1.8rem; color: #1a237e; margin: 4px 0; }
+.auth-logo p { color: #666; font-size: 0.9rem; }
+
+.auth-card h2 { font-size: 1.3rem; color: #333; margin-bottom: 20px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 6px; font-weight: 600; }
+.form-group input {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid #e0e0e0; border-radius: 8px;
+  font-size: 0.95rem; transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.form-group input:focus { outline: none; border-color: #1a237e; }
+
+.btn-primary {
+  width: 100%; padding: 13px;
+  background: #1a237e; color: white;
+  border: none; border-radius: 8px;
+  font-size: 1rem; font-weight: 600;
+  cursor: pointer; margin-top: 8px;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #283593; }
+
+.btn-google {
+  width: 100%; padding: 12px;
+  background: white; color: #333;
+  border: 2px solid #e0e0e0; border-radius: 8px;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-google:hover { border-color: #4285F4; background: #f8f9ff; }
+.btn-google img { width: 20px; height: 20px; }
+
+.divider { text-align: center; margin: 18px 0; color: #aaa; font-size: 0.85rem; position: relative; }
+.divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 42%; height: 1px; background: #e0e0e0; }
+.divider::before { left: 0; } .divider::after { right: 0; }
+
+.error-box { background: #ffebee; color: #c62828; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.88rem; }
+.auth-footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem; }
+.auth-footer a { color: #1a237e; font-weight: 600; text-decoration: none; }
