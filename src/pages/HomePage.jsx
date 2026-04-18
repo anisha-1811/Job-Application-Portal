@@ -13,7 +13,7 @@ export default function HomePage() {
       <nav className="home-nav">
         <div className="nav-brand">
           <span className="brand-icon">🎓</span>
-          <span>ApplyPortal</span>
+          <span>Career Portal</span>
         </div>
         <div className="nav-links">
           {currentUser ? (
@@ -33,7 +33,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-badge">🚀 Applications Open 2025</div>
+        <div className="hero-badge">🚀 Applications Open 2026</div>
         <h1 className="hero-title">
           Launch Your Career<br />
           <span className="hero-highlight">The Right Way</span>
