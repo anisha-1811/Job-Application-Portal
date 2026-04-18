@@ -5,6 +5,7 @@ import {
   signInWithPopup
 } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import "./Auth.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,68 +16,80 @@ export default function Login() {
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      navigate("/apply");
     } catch (err) {
       console.error(err);
-      setError("Invalid email or password");
+      setError("Invalid email or password. Please try again.");
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/");
+      navigate("/apply");
     } catch (err) {
       console.error(err);
-      setError("Google login failed");
+      setError("Google login failed. Please try again.");
     }
   };
 
   return (
-    <div style={{ padding: "40px", maxWidth: "400px", margin: "auto" }}>
-      <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-logo">
+          <div className="logo-icon">🎓</div>
+          <h1>ApplyPortal</h1>
+          <p>Career &amp; Internship Applications</p>
+        </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <h2>Sign In to Your Account</h2>
 
-      <form onSubmit={handleEmailLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+        {error && <div className="error-box">{error}</div>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+        <form onSubmit={handleEmailLogin}>
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" style={{ width: "100%", padding: "10px" }}>
-          Login
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn-primary">
+            Sign In
+          </button>
+        </form>
+
+        <div className="divider">or</div>
+
+        <button onClick={handleGoogleLogin} className="btn-google">
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+          />
+          Continue with Google
         </button>
-      </form>
 
-      <br />
-
-      <button
-        onClick={handleGoogleLogin}
-        style={{ width: "100%", padding: "10px" }}
-      >
-        Login with Google
-      </button>
-
-      <p style={{ marginTop: "10px" }}>
-        New user? <Link to="/register">Register</Link>
-      </p>
+        <div className="auth-footer">
+          New user? <Link to="/register">Create an account</Link>
+        </div>
+      </div>
     </div>
   );
 }

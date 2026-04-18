@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import Navbar from "../components/shared/Navbar";
+import ProgressBar from "../components/shared/ProgressBar";
 import Step1Personal from "../components/steps/Step1Personal";
 import Step2Education from "../components/steps/Step2Education";
 import Step3Experience from "../components/steps/Step3Experience";
 import Step4Documents from "../components/steps/Step4Documents";
 import Step5Review from "../components/steps/Step5Review";
+import "./ApplicationPage.css";
+
+const STEPS = ["Personal", "Education", "Experience", "Documents", "Review"];
 
 export default function ApplicationPage() {
   const [step, setStep] = useState(1);
@@ -52,8 +56,13 @@ export default function ApplicationPage() {
     <>
       <Navbar />
 
-      <div style={{ padding: "80px 20px" }}>
-        <h1>Job Application Portal</h1>
+      <div className="application-container">
+        <div className="application-header">
+          <h1>Job Application Portal</h1>
+          <p>Complete all 5 steps to submit your application</p>
+        </div>
+
+        <ProgressBar currentStep={step} steps={STEPS} />
 
         {step === 1 && (
           <Step1Personal data={formData} update={update} onNext={next} />

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase/config";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-// import "./Auth.css"; // 🔴 keep commented for now if UI breaks
+import "./Auth.css";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -26,7 +26,6 @@ export default function Register() {
     setError("");
     setLoading(true);
 
-    // ✅ Validation
     if (form.password !== form.confirm) {
       setError("Passwords do not match.");
       setLoading(false);
@@ -68,68 +67,80 @@ export default function Register() {
   };
 
   return (
-    <div style={{ padding: "40px", maxWidth: "400px", margin: "auto" }}>
-      <h2>Register</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-logo">
+          <div className="logo-icon">🎓</div>
+          <h1>ApplyPortal</h1>
+          <p>Create your account to apply</p>
+        </div>
 
-      {error && (
-        <p style={{ color: "red", marginBottom: "10px" }}>
-          {error}
-        </p>
-      )}
+        <h2>Create Account</h2>
 
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+        {error && <div className="error-box">{error}</div>}
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+        <form onSubmit={handleRegister}>
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your full name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <input
-          type="password"
-          name="confirm"
-          placeholder="Confirm Password"
-          value={form.confirm}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Min. 6 characters"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: "100%", padding: "10px" }}
-        >
-          {loading ? "Creating Account..." : "Register"}
-        </button>
-      </form>
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirm"
+              placeholder="Re-enter your password"
+              value={form.confirm}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <p style={{ marginTop: "15px" }}>
-        Already registered? <Link to="/login">Login</Link>
-      </p>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Create Account"}
+          </button>
+        </form>
+
+        <div className="auth-footer">
+          Already registered? <Link to="/login">Sign In</Link>
+        </div>
+      </div>
     </div>
   );
 }
