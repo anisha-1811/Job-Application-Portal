@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎓 ApplyPortal — Job Application Portal
+# 🎓 Carrer Portal — Job Application Portal
 
 **A modern, full-stack job application platform built with React 19 and Firebase**
 
