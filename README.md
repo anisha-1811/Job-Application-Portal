@@ -1,15 +1,17 @@
 <div align="center">
 
-# 🎓 Carrer Portal — Job Application Portal
+# 🎓 ApplyPortal — Job Application Portal
 
 **A modern, full-stack job application platform built with React 19 and Firebase**
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-12-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](YOUR_VERCEL_URL_HERE)
 
-[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure) · [Firebase Setup](#-firebase-setup) · [Screenshots](#-app-flow)
+### 🌐 [Live Demo →](https://job-application-portal-alpha.vercel.app)
+
+[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure) · [Deploy](#️-deployment) · [Firebase Setup](#-firebase-setup)
 
 </div>
 
@@ -25,6 +27,7 @@
 - 🎫 **Unique Application ID** — Every submission generates a unique tracking ID
 - 📱 **Responsive Design** — Works cleanly across desktop and mobile screens
 - 🎨 **Polished UI** — Custom CSS with consistent design tokens, smooth transitions, and hover effects
+- 🔒 **Secure Config** — Firebase credentials managed via environment variables, never hardcoded
 
 ---
 
@@ -37,8 +40,9 @@
 | Authentication | Firebase Auth v12 (Email + Google OAuth) |
 | Database | Cloud Firestore |
 | Styling | Pure CSS (modular, per-component) |
-| Forms | Controlled components with built-in HTML5 validation |
+| Forms | Controlled components with HTML5 validation |
 | Build Tool | Create React App (react-scripts 5) |
+| Deployment | Vercel |
 
 ---
 
@@ -52,14 +56,12 @@ src/
 │   │   ├── Login.jsx           # Email & Google login form
 │   │   ├── Register.jsx        # New user registration
 │   │   ├── ProtectedRoute.jsx  # Auth guard for private routes
-│   │   └── Auth.css            # Shared auth page styles
+│   │   └── Auth.css
 │   │
 │   ├── shared/
 │   │   ├── Navbar.jsx          # Sticky top navigation bar
-│   │   ├── Navbar.css
-│   │   ├── ProgressBar.jsx     # Step indicator component
-│   │   ├── ProgressBar.css
-│   │   └── StepForm.css        # Shared form styles used by all steps
+│   │   ├── ProgressBar.jsx     # 5-step visual indicator
+│   │   └── StepForm.css        # Shared form styles across all steps
 │   │
 │   └── steps/
 │       ├── Step1Personal.jsx   # Name, DOB, gender, address
@@ -69,17 +71,17 @@ src/
 │       └── Step5Review.jsx     # Full summary table + submit
 │
 ├── context/
-│   └── AuthContext.js          # Global auth state via React Context
+│   └── AuthContext.js          # Global auth state (React Context API)
 │
 ├── firebase/
-│   └── config.js               # Firebase app initialization & exports
+│   └── config.js               # Firebase init using env variables
 │
 ├── pages/
-│   ├── HomePage.jsx / .css     # Landing page with hero & how-it-works
-│   ├── ApplicationPage.jsx / .css  # Hosts the 5-step form + progress bar
-│   └── SuccessPage.jsx / .css  # Confirmation page with Application ID
+│   ├── HomePage.jsx            # Landing page with hero & how-it-works
+│   ├── ApplicationPage.jsx     # Hosts the 5-step form + progress bar
+│   └── SuccessPage.jsx         # Confirmation page with Application ID
 │
-├── App.jsx                     # Route definitions
+├── App.jsx                     # All route definitions
 └── index.js                    # React DOM entry point
 ```
 
@@ -92,7 +94,7 @@ src/
 - [Node.js](https://nodejs.org/) v16 or higher
 - A [Firebase](https://console.firebase.google.com/) project (free Spark plan works)
 
-### 1. Clone the repository
+### 1. Clone the repo
 
 ```bash
 git clone https://github.com/anisha-1811/Job-Application-Portal.git
@@ -101,94 +103,125 @@ cd Job-Application-Portal
 
 ### 2. Install dependencies
 
-> React 19 and react-scripts 5 have a peer dependency conflict — use the flag below:
+> React 19 and react-scripts 5 have a known peer dependency conflict — the flag below handles it:
 
 ```bash
 npm install --legacy-peer-deps
 ```
 
-### 3. Configure Firebase
+### 3. Set up environment variables
 
-Open `src/firebase/config.js` and replace the placeholder values with your real Firebase project credentials (see [Firebase Setup](#-firebase-setup) below):
-
-```js
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+```bash
+cp .env.example .env
 ```
 
-### 4. Start the development server
+Open `.env` and fill in your Firebase credentials (see [Firebase Setup](#-firebase-setup)):
+
+```env
+REACT_APP_FIREBASE_API_KEY=your_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+```
+
+### 4. Run locally
 
 ```bash
 npm start
 ```
 
-App will open at **http://localhost:3000** 🎉
+App opens at **http://localhost:3000** 🎉
 
 ---
 
 ## 🔥 Firebase Setup
 
-1. Go to [Firebase Console](https://console.firebase.google.com/) and create a new project
-2. In the left sidebar → **Authentication** → **Get started** → enable **Email/Password** and **Google** providers
-3. In the left sidebar → **Firestore Database** → **Create database** → choose a region → start in test mode
-4. Go to ⚙️ **Project Settings** → **Your apps** → click the `</>` web icon → register app → copy the config object into `src/firebase/config.js`
+1. Go to [Firebase Console](https://console.firebase.google.com/) → **Create a project**
+2. **Authentication** → Get started → Enable **Email/Password** and **Google** providers
+3. **Firestore Database** → Create database → choose region → start in **test mode**
+4. ⚙️ **Project Settings** → Your apps → click `</>` → Register app → copy the config values into your `.env` file
+
+---
+
+## ☁️ Deployment
+
+### Deploy to Vercel (Recommended — free & fast)
+
+**1.** Push your code to GitHub (`.env` is already gitignored by Create React App — your keys stay safe)
+
+**2.** Go to [vercel.com](https://vercel.com) → **Sign in with GitHub** → **Add New Project** → import this repo
+
+**3.** In Vercel's project settings, open **Environment Variables** and add all 6 Firebase keys from your `.env` file
+
+**4.** Set the **Build Command** to:
+```
+npm install --legacy-peer-deps && npm run build
+```
+
+**5.** Click **Deploy** — Vercel gives you a live URL instantly
+
+**6.** Copy your Vercel URL and replace both `YOUR_VERCEL_URL_HERE` placeholders at the top of this README, then push
+
+### Deploy to Firebase Hosting (Alternative)
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase init hosting
+npm run build
+firebase deploy
+```
 
 ---
 
 ## 🗺 App Flow
 
 ```
-/ (Home)
+/ (Home Page)
 │
-├── /register  →  Create account  ──┐
-├── /login     →  Sign in         ──┤
-│                                   ↓
-└────────────────────────────── /apply (Protected)
-                                     │
-                                     ├── Step 1: Personal Info
-                                     ├── Step 2: Education
-                                     ├── Step 3: Skills & Experience
-                                     ├── Step 4: Document Uploads
-                                     └── Step 5: Review & Submit
-                                                  │
-                                                  ↓
-                                             /success
-                                      (Unique Application ID)
+├── /register  ──→  Create account
+├── /login     ──→  Sign in
+│                       │
+│                       ↓
+└──────────────── /apply  (Protected — login required)
+                      │
+                      ├── Step 1 · Personal Info
+                      ├── Step 2 · Education
+                      ├── Step 3 · Skills & Experience
+                      ├── Step 4 · Document Uploads
+                      └── Step 5 · Review & Submit
+                                      │
+                                      ↓
+                                 /success
+                          (Unique Application ID)
 ```
 
 ---
 
-## 📄 Application Form — What's Collected
+## 📄 What the Form Collects
 
 | Step | Section | Fields |
 |------|---------|--------|
 | 1 | Personal Info | First name, last name, DOB, gender, phone, address, city, state, PIN, nationality |
 | 2 | Education | Degree, branch, institution, CGPA, passing year, 12th & 10th board & marks |
 | 3 | Experience | Technical skills, work experience, internships, projects, achievements |
-| 4 | Documents | Resume/CV, passport photo, ID proof (Aadhaar/PAN/Passport) |
-| 5 | Review | Full summary table — verify everything before submitting |
+| 4 | Documents | Resume/CV, passport photo, ID proof (Aadhaar / PAN / Passport) |
+| 5 | Review | Complete summary — verify all fields before final submission |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how:
+Contributions are welcome!
 
 ```bash
-# Fork the repo, then:
 git checkout -b feature/your-feature-name
 git commit -m "feat: describe your change"
 git push origin feature/your-feature-name
 # Open a Pull Request
 ```
-
-Please keep commits descriptive and code clean.
 
 ---
 
@@ -202,6 +235,6 @@ This project is licensed under the **MIT License** — feel free to use, modify,
 
 Built with ❤️ by [Anisha](https://github.com/anisha-1811) &nbsp;·&nbsp; Powered by React & Firebase
 
-⭐ If you found this useful, consider giving it a star!
+⭐ If this helped you, give it a star — it means a lot!
 
 </div>
