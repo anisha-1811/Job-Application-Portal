@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCQR9MuRno6C3uiM40_0QckxYN7V0aTkg8",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "job-portal-a4e65.firebaseapp.com",
   projectId: "job-portal-a4e65",
   storageBucket: "job-portal-a4e65.firebasestorage.app",
