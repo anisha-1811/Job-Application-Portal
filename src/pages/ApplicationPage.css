@@ -1,26 +1,59 @@
 .application-container {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 30px 20px 60px;
+  padding: 32px 20px 72px;
 }
 
+/* Page header banner */
 .application-header {
   text-align: center;
-  margin-bottom: 10px;
-  padding: 28px 20px;
-  background: linear-gradient(135deg, #1a237e, #3949ab);
-  border-radius: 16px;
+  padding: 36px 28px 30px;
+  background: linear-gradient(145deg, #0d1757 0%, #1a237e 52%, #3949ab 100%);
+  border-radius: 18px;
   color: white;
   margin-bottom: 24px;
+  box-shadow: 0 10px 36px rgba(26,35,126,0.28);
+  position: relative;
+  overflow: hidden;
+}
+/* Decorative circles */
+.application-header::before {
+  content: '';
+  position: absolute;
+  width: 280px; height: 280px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  top: -110px; right: -60px;
+  pointer-events: none;
+}
+.application-header::after {
+  content: '';
+  position: absolute;
+  width: 180px; height: 180px;
+  background: rgba(255,204,2,0.07);
+  border-radius: 50%;
+  bottom: -70px; left: -40px;
+  pointer-events: none;
 }
 
 .application-header h1 {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-family: 'Merriweather', serif;
-  margin-bottom: 6px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+  position: relative;
+  z-index: 1;
+}
+.application-header p {
+  opacity: 0.78;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
 }
 
-.application-header p {
-  opacity: 0.8;
-  font-size: 0.9rem;
+@media (max-width: 600px) {
+  .application-container { padding: 16px 12px 60px; }
+  .application-header    { padding: 24px 16px 22px; border-radius: 12px; }
+  .application-header h1 { font-size: 1.3rem; }
 }

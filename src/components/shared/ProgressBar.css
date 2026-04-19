@@ -1,18 +1,99 @@
 .progress-wrapper {
-  display: flex; align-items: flex-start; justify-content: center;
-  padding: 24px 20px; gap: 0; flex-wrap: nowrap; overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  gap: 0;
 }
-.step-item { display: flex; flex-direction: column; align-items: center; min-width: 90px; }
+
+/* Individual step node */
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-width: 86px;
+}
+
+/* Circle */
 .step-circle {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: #e0e0e0; color: #888;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 0.95rem; transition: all 0.3s;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 2.5px solid #e2e8f0;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.35s ease;
 }
-.step-item.active .step-circle { background: #1a237e; color: white; box-shadow: 0 0 0 4px #c5cae9; }
-.step-item.completed .step-circle { background: #2e7d32; color: white; }
-.step-label { font-size: 0.72rem; color: #888; margin-top: 6px; text-align: center; }
-.step-item.active .step-label { color: #1a237e; font-weight: 700; }
-.step-item.completed .step-label { color: #2e7d32; }
-.step-line { flex: 1; height: 3px; background: #e0e0e0; margin-top: 20px; min-width: 30px; transition: background 0.3s; }
-.step-line.filled { background: #2e7d32; }
+
+/* Active */
+.step-item.active .step-circle {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-color: #1a237e;
+  color: white;
+  font-size: 1rem;
+  box-shadow: 0 0 0 5px rgba(26,35,126,0.14);
+  animation: step-pulse 2.2s ease-in-out infinite;
+}
+
+/* Completed */
+.step-item.completed .step-circle {
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  border-color: #16a34a;
+  color: white;
+  font-size: 1.05rem;
+}
+
+/* Labels */
+.step-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-align: center;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+.step-item.active .step-label    { color: #1a237e; font-weight: 800; }
+.step-item.completed .step-label { color: #15803d; }
+
+/* Connector line */
+.step-line {
+  flex: 1;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  min-width: 20px;
+  position: relative;
+  overflow: hidden;
+}
+/* Animated fill via pseudo-element */
+.step-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #15803d, #22c55e);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.step-line.filled::after { width: 100%; }
+
+@keyframes step-pulse {
+  0%   { box-shadow: 0 0 0 5px rgba(26,35,126,0.14), 0 0 0 0   rgba(26,35,126,0.2); }
+  70%  { box-shadow: 0 0 0 5px rgba(26,35,126,0.14), 0 0 0 13px rgba(26,35,126,0); }
+  100% { box-shadow: 0 0 0 5px rgba(26,35,126,0.14), 0 0 0 0   rgba(26,35,126,0); }
+}

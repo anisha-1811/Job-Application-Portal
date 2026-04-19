@@ -1,25 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:wght@700;800&display=swap');
 
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: #f0f4f8;
-  color: #1a1a2e;
-  min-height: 100vh;
+:root {
+  --primary:       #1a237e;
+  --primary-mid:   #283593;
+  --primary-light: #3949ab;
+  --primary-pale:  #e8eaf6;
+  --accent:        #ffcc02;
+  --success:       #2e7d32;
+  --success-light: #e8f5e9;
+  --danger:        #c62828;
+  --danger-light:  #ffebee;
+  --bg:            #f0f4f8;
+  --card:          #ffffff;
+  --border:        #e2e8f0;
+  --text:          #1a1a2e;
+  --muted:         #64748b;
+  --shadow-sm:     0 1px 4px rgba(0,0,0,0.07);
+  --shadow-md:     0 4px 20px rgba(0,0,0,0.09);
+  --shadow-lg:     0 12px 40px rgba(0,0,0,0.13);
 }
 
-:root {
-  --primary: #1a237e;
-  --primary-light: #3949ab;
-  --accent: #e65100;
-  --success: #2e7d32;
-  --bg: #f0f4f8;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --text-muted: #64748b;
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
+
+input, select, textarea, button {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+a { text-decoration: none; }
+
+::selection {
+  background: #c5cae9;
+  color: var(--primary);
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #c5cae9; border-radius: 10px; }

@@ -6,16 +6,8 @@ import "./Navbar.css";
 export default function Navbar() {
   const navigate = useNavigate();
 
-  let currentUser = null;
-  let logout = () => {};
-
-  try {
-    const auth = useAuth();
-    currentUser = auth?.currentUser;
-    logout = auth?.logout || logout;
-  } catch (e) {
-    console.log("Auth not ready yet");
-  }
+  // ✅ Correct: Hook used at top level
+  const { currentUser, logout } = useAuth();
 
   return (
     <nav className="app-navbar">
@@ -32,8 +24,8 @@ export default function Navbar() {
             </div>
 
             <button
-              onClick={() => {
-                logout();
+              onClick={async () => {
+                await logout();   // 🔥 better to await logout
                 navigate("/");
               }}
               className="navbar-logout"
