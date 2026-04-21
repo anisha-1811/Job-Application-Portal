@@ -5,38 +5,58 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
-
-  // ✅ Correct: Hook used at top level
   const { currentUser, logout } = useAuth();
 
   return (
     <nav className="app-navbar">
+      {/* Brand */}
       <div className="navbar-brand" onClick={() => navigate("/")}>
-        🎓 ApplyPortal
+        <span className="brand-icon">🎓✨</span>
+        <span className="brand-text">Career Portal</span>
       </div>
 
+      {/* Right Side */}
       <div className="navbar-right">
         {currentUser ? (
           <>
             <div className="user-pill">
               <span className="user-dot"></span>
-              {currentUser.displayName || currentUser.email}
+              👤 {currentUser.displayName || currentUser.email}
             </div>
 
             <button
+              onClick={() => navigate("/apply")}
+              className="navbar-primary"
+            >
+              📊 My Application
+            </button>
+
+            <button
               onClick={async () => {
-                await logout();   // 🔥 better to await logout
+                await logout();
                 navigate("/");
               }}
               className="navbar-logout"
             >
-              Sign Out
+              🚪 Sign Out
             </button>
           </>
         ) : (
-          <button onClick={() => navigate("/login")}>
-            Login
-          </button>
+          <>
+            <button
+              onClick={() => navigate("/login")}
+              className="navbar-outline"
+            >
+              🔐 Login
+            </button>
+
+            <button
+              onClick={() => navigate("/register")}
+              className="navbar-primary"
+            >
+              🚀 Apply Now
+            </button>
+          </>
         )}
       </div>
     </nav>

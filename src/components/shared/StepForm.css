@@ -1,34 +1,88 @@
-/* =====================================================
-   StepForm.css — shared by Step1–Step5 and review
-   ===================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap');
 
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --navy:         #0d1757;
+  --navy-mid:     #1a237e;
+  --indigo:       #3949ab;
+  --violet:       #6366f1;
+  --violet-soft:  rgba(99,102,241,0.10);
+  --violet-glow:  rgba(99,102,241,0.18);
+  --surface:      #f4f6fb;
+  --card-bg:      #ffffff;
+  --border:       #e8eaf2;
+  --border-focus: #6366f1;
+  --text-main:    #0f172a;
+  --text-muted:   #64748b;
+  --text-label:   #374151;
+  --text-hint:    #94a3b8;
+  --green:        #15803d;
+  --green-light:  #22c55e;
+  --font:         'Sora', sans-serif;
+  --r-sm:         10px;
+  --r-md:         14px;
+  --r-lg:         20px;
+  --shadow-card:  0 4px 32px rgba(15,23,42,0.07), 0 1px 4px rgba(15,23,42,0.04);
+  --shadow-focus: 0 0 0 4px rgba(99,102,241,0.14);
+  --shadow-btn:   0 6px 20px rgba(26,35,126,0.28);
+}
+
+/* ═══════════════════════════════════════════
+   FORM CARD
+═══════════════════════════════════════════ */
 .step-form,
 .review-container {
-  background: white;
-  border-radius: 16px;
-  padding: 38px 42px;
+  background: var(--card-bg);
+  border-radius: var(--r-lg);
+  padding: 44px 48px;
   max-width: 750px;
   margin: 0 auto;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  border: 1px solid #e2e8f0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  font-family: var(--font);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top accent stripe */
+.step-form::before,
+.review-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy-mid), var(--violet), #8b5cf6);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
 }
 
 /* ── Headings ── */
 .step-form h2,
 .review-container h2 {
-  color: #0f172a;
-  font-size: 1.4rem;
+  color: var(--text-main);
+  font-size: 1.45rem;
   font-weight: 800;
   margin-bottom: 6px;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
+}
+
+/* Underline accent */
+.step-form h2::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy-mid), var(--violet));
+  border-radius: 4px;
+  margin-top: 9px;
 }
 
 .step-desc {
-  color: #64748b;
-  font-size: 0.88rem;
-  margin-bottom: 28px;
-  line-height: 1.65;
+  color: var(--text-muted);
+  font-size: 0.87rem;
+  margin-bottom: 30px;
+  line-height: 1.7;
 }
 
 /* ── Section heading ── */
@@ -37,21 +91,21 @@
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  color: #1a237e;
-  font-size: 0.8rem;
+  color: var(--navy-mid);
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 28px 0 14px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #e8eaf6;
-  position: relative;
+  letter-spacing: 1.1px;
+  margin: 30px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #eceef8;
 }
+
 .section-heading::before {
   content: '';
   display: inline-block;
   width: 4px;
-  height: 16px;
-  background: linear-gradient(180deg, #1a237e, #3949ab);
+  height: 15px;
+  background: linear-gradient(180deg, var(--navy-mid), var(--violet));
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -71,74 +125,75 @@
 }
 
 .form-group label {
-  font-size: 0.77rem;
+  font-size: 0.74rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--text-label);
   margin-bottom: 7px;
   text-transform: uppercase;
-  letter-spacing: 0.45px;
+  letter-spacing: 0.55px;
 }
 
 /* ── Inputs, selects, textareas ── */
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 11px 14px;
-  border: 2px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 0.92rem;
-  color: #0f172a;
-  background: #fafbfc;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  padding: 11px 15px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  font-size: 0.91rem;
+  color: var(--text-main);
+  background: #fafbfd;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   outline: none;
-  font-family: inherit;
+  font-family: var(--font);
   box-sizing: border-box;
+  width: 100%;
 }
-.form-group textarea { resize: vertical; }
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+  border-color: #c7d2fe;
+  background: #f8f9ff;
+}
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: #1a237e;
-  background: white;
-  box-shadow: 0 0 0 4px rgba(26,35,126,0.08);
+  border-color: var(--border-focus);
+  background: #ffffff;
+  box-shadow: var(--shadow-focus);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #94a3b8;
-}
-
-/* File inputs */
-.form-group input[type="file"] {
-  padding: 9px 12px;
-  background: #f8fafc;
-  color: #374151;
-  cursor: pointer;
-  border-style: dashed;
-}
-.form-group input[type="file"]:hover {
-  border-color: #1a237e;
-  background: #eef2ff;
+  color: var(--text-hint);
+  font-weight: 400;
 }
 
 .form-group small {
-  color: #94a3b8;
-  font-size: 0.77rem;
-  margin-top: 5px;
+  color: var(--text-hint);
+  font-size: 0.75rem;
+  margin-top: 6px;
+  line-height: 1.5;
 }
 
 /* ── Info box ── */
 .info-box {
-  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
-  border: 1px solid #bfdbfe;
-  border-left: 4px solid #3b82f6;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #eff6ff, #eef2ff);
+  border: 1px solid #c7d2fe;
+  border-left: 4px solid var(--violet);
+  border-radius: var(--r-md);
   padding: 13px 16px;
-  margin-bottom: 22px;
-  font-size: 0.86rem;
-  color: #1e40af;
-  line-height: 1.55;
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+  color: #3730a3;
+  line-height: 1.6;
 }
 
 /* ── Navigation buttons ── */
@@ -146,179 +201,200 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 32px;
-  padding-top: 22px;
-  border-top: 2px solid #f1f5f9;
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1.5px solid #f1f5f9;
 }
 
 .btn-back {
   padding: 11px 24px;
-  border: 2px solid #e2e8f0;
-  background: white;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
   color: #475569;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
+  transition: all 0.2s ease;
+  font-family: var(--font);
 }
+
 .btn-back:hover {
-  border-color: #94a3b8;
-  background: #f8fafc;
-  color: #0f172a;
+  border-color: #a5b4fc;
+  background: #f5f6ff;
+  color: var(--navy-mid);
+  transform: translateY(-1px);
 }
+
 .btn-back:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-next {
   padding: 11px 28px;
-  background: linear-gradient(135deg, #1a237e, #3949ab);
-  color: white;
+  background: linear-gradient(135deg, var(--navy-mid), var(--indigo));
+  color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   font-weight: 700;
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  font-family: inherit;
-  letter-spacing: 0.2px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-family: var(--font);
+  letter-spacing: 0.1px;
+  box-shadow: 0 4px 14px rgba(26,35,126,0.22);
 }
+
 .btn-next:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(26,35,126,0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
 }
-.btn-next:active { transform: none; }
+
+.btn-next:active {
+  transform: none;
+  box-shadow: none;
+}
 
 .btn-submit {
   padding: 12px 30px;
-  background: linear-gradient(135deg, #15803d, #22c55e);
-  color: white;
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   font-weight: 700;
-  font-size: 0.97rem;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  font-family: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-family: var(--font);
+  box-shadow: 0 4px 14px rgba(21,128,61,0.24);
 }
+
 .btn-submit:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(21,128,61,0.32);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(21,128,61,0.32);
 }
-.btn-submit:active  { transform: none; }
-.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-submit:active   { transform: none; box-shadow: none; }
+.btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-submit.submitted {
   background: linear-gradient(135deg, #166534, #16a34a);
 }
 
-@media (max-width: 600px) {
-  .step-form, .review-container { padding: 24px 18px; }
-}
-
-/* ══════════════════════════════════════════
-   REVIEW TABLE  (Step 5 — .review-container)
-   ══════════════════════════════════════════ */
-
+/* ═══════════════════════════════════════════
+   REVIEW TABLE
+═══════════════════════════════════════════ */
 .review-container table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin-top: 8px;
-  border-radius: 12px;
+  margin-top: 10px;
+  border-radius: var(--r-md);
   overflow: hidden;
-  border: 1px solid #e2e8f0;
-}
-
-/* Section group header rows — rows where the label cell is alone */
-.review-container table tr:first-child td {
-  border-top: none;
+  border: 1.5px solid var(--border);
 }
 
 .review-container table tr {
-  transition: background 0.15s;
+  transition: background 0.15s ease;
 }
-.review-container table tr:hover {
-  background: #f8faff;
+
+.review-container table tr:hover td {
+  background: #f5f6ff !important;
 }
 
 /* Label cell */
 .review-container table td:first-child {
-  background: #f8f9ff !important;
+  background: #f7f8ff !important;
   font-weight: 700 !important;
   color: #374151 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.79rem !important;
   width: 36%;
-  padding: 11px 16px !important;
-  border-bottom: 1px solid #e8eaf6 !important;
-  border-right: 1px solid #e8eaf6;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #eceef8 !important;
+  border-right: 1px solid #eceef8;
   vertical-align: top;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 /* Value cell */
 .review-container table td:last-child {
-  color: #0f172a !important;
+  color: var(--text-main) !important;
   font-size: 0.9rem !important;
-  padding: 11px 16px !important;
-  border-bottom: 1px solid #e8eaf6 !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #eceef8 !important;
   word-break: break-word;
   vertical-align: top;
-  line-height: 1.55;
-  background: white !important;
+  line-height: 1.6;
+  background: #ffffff !important;
 }
 
-.review-container table tr:last-child td {
-  border-bottom: none !important;
-}
+.review-container table tr:first-child td { border-top: none; }
+.review-container table tr:last-child td  { border-bottom: none !important; }
 
-/* Alternating very subtle stripe */
 .review-container table tr:nth-child(even) td:first-child {
-  background: #f1f4ff !important;
+  background: #f0f2ff !important;
 }
 
-/* ══════════════════════════════════════════
-   FILE UPLOAD ZONE  (Step 4)
-   ══════════════════════════════════════════ */
-
-/* Wrap each file group in a styled card */
+/* ═══════════════════════════════════════════
+   FILE UPLOAD ZONE
+═══════════════════════════════════════════ */
 .form-group:has(input[type="file"]) {
-  background: #fafbfc;
-  border: 2px dashed #e2e8f0;
-  border-radius: 12px;
-  padding: 16px 18px;
-  transition: border-color 0.2s, background 0.2s;
+  background: #fafbfd;
+  border: 2px dashed #d0d5f0;
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  transition: border-color 0.22s ease, background 0.22s ease;
 }
+
 .form-group:has(input[type="file"]):hover,
 .form-group:has(input[type="file"]):focus-within {
-  border-color: #1a237e;
-  background: #eef2ff;
+  border-color: var(--violet);
+  background: #f0f1ff;
 }
 
 .form-group:has(input[type="file"]) label {
-  color: #1a237e;
-  font-size: 0.82rem;
+  color: var(--navy-mid);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
 .form-group input[type="file"] {
   border: none !important;
   background: transparent !important;
-  padding: 6px 0 !important;
+  padding: 4px 0 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.84rem;
 }
+
 .form-group input[type="file"]:hover {
   border: none !important;
   background: transparent !important;
 }
 
-/* Step heading accent colours */
-.step-form h2::after {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 3px;
-  background: linear-gradient(90deg, #1a237e, #3949ab);
-  border-radius: 4px;
-  margin-top: 8px;
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .step-form,
+  .review-container {
+    padding: 28px 20px;
+    border-radius: var(--r-md);
+  }
+
+  .step-buttons {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .btn-back,
+  .btn-next,
+  .btn-submit {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 }

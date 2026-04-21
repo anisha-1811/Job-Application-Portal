@@ -40,7 +40,7 @@ export default function Login() {
       <div className="auth-card">
         <div className="auth-logo">
           <div className="logo-icon">🎓</div>
-          <h1>ApplyPortal</h1>
+          <h1>Career Portal</h1>
           <p>Career &amp; Internship Applications</p>
         </div>
 

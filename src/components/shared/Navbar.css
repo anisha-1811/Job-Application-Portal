@@ -1,12 +1,19 @@
 .app-navbar {
-  background: white;
-  border-bottom: 3px solid #1a237e;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+
   padding: 0 40px;
   height: 64px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   position: sticky;
   top: 0;
   z-index: 200;
@@ -16,13 +23,19 @@
 .navbar-brand {
   font-size: 1.18rem;
   font-weight: 800;
-  color: #1a237e;
   cursor: pointer;
+
   display: flex;
   align-items: center;
   gap: 10px;
+
   letter-spacing: -0.3px;
   transition: opacity 0.2s;
+
+  /* Gradient text */
+  background: linear-gradient(135deg, #1a237e, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .navbar-brand:hover { opacity: 0.8; }
 
@@ -33,18 +46,23 @@
   gap: 12px;
 }
 
-/* Logged-in user pill */
+/* User pill (glass style) */
 .user-pill {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #eef2ff;
-  border: 1px solid #c7d2fe;
+
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(199,210,254,0.5);
   padding: 6px 16px 6px 10px;
   border-radius: 50px;
+
   font-size: 0.82rem;
   font-weight: 600;
   color: #1a237e;
+
   max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -60,42 +78,56 @@
   box-shadow: 0 0 0 2px #dcfce7;
 }
 
-/* Sign Out button */
+/* Logout button */
 .navbar-logout {
   padding: 7px 18px;
-  background: white;
-  border: 2px solid #fecaca;
-  color: #dc2626;
+
+  background: rgba(239,68,68,0.9);
+  backdrop-filter: blur(6px);
+
+  border: none;
+  color: white;
+
   border-radius: 9px;
   font-weight: 700;
   font-size: 0.82rem;
+
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
   font-family: inherit;
 }
+
 .navbar-logout:hover {
-  background: #fee2e2;
-  border-color: #dc2626;
+  background: rgba(220,38,38,1);
+  transform: translateY(-1px);
 }
 
-/* Login button — the plain <button> with no class */
+/* Login / Primary button */
 .navbar-right > button:not(.navbar-logout) {
   padding: 8px 22px;
-  background: linear-gradient(135deg, #1a237e, #3949ab);
+
+  background: linear-gradient(135deg, #1a237e, #6366f1);
   color: white;
+
   border: none;
-  border-radius: 9px;
+  border-radius: 10px;
+
   font-size: 0.88rem;
   font-weight: 700;
+
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: all 0.25s ease;
   font-family: inherit;
-}
-.navbar-right > button:not(.navbar-logout):hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 16px rgba(26,35,126,0.3);
+
+  box-shadow: 0 6px 20px rgba(99,102,241,0.3);
 }
 
+.navbar-right > button:not(.navbar-logout):hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+}
+
+/* Responsive */
 @media (max-width: 600px) {
   .app-navbar { padding: 0 16px; height: 58px; }
   .user-pill   { max-width: 140px; font-size: 0.75rem; }

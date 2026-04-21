@@ -71,7 +71,7 @@ export default function Register() {
       <div className="auth-card">
         <div className="auth-logo">
           <div className="logo-icon">🎓</div>
-          <h1>ApplyPortal</h1>
+          <h1>Career Portal</h1>
           <p>Create your account to apply</p>
         </div>
 
