@@ -4,11 +4,11 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: "job-portal-a4e65.firebaseapp.com",
-  projectId: "job-portal-a4e65",
-  storageBucket: "job-portal-a4e65.firebasestorage.app",
-  messagingSenderId: "205939614343",
-  appId: "1:205939614343:web:78c097b88828d4b9080e22"
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 const app = getApps().length === 0
