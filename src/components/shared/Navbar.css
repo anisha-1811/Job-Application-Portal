@@ -34,9 +34,12 @@
 
   /* Gradient text */
   background: linear-gradient(135deg, #1a237e, #6366f1);
+  background-clip: text;              /* ✅ FIX */
   -webkit-background-clip: text;
+  color: transparent;                 /* ✅ FIX */
   -webkit-text-fill-color: transparent;
 }
+
 .navbar-brand:hover { opacity: 0.8; }
 
 /* Right-side cluster */
@@ -54,6 +57,7 @@
 
   background: rgba(255,255,255,0.5);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* ✅ FIX (consistency) */
 
   border: 1px solid rgba(199,210,254,0.5);
   padding: 6px 16px 6px 10px;
@@ -84,6 +88,7 @@
 
   background: rgba(239,68,68,0.9);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); /* ✅ FIX */
 
   border: none;
   color: white;
