@@ -77,6 +77,28 @@ function getYearWarning(degrees, index) {
 
   return "";
 }
+function getTenthTwelfthWarning(data) {
+  const tenth = parseInt(data.tenthYear, 10);
+  const twelfth = parseInt(data.twelthYear, 10);
+
+  if (isNaN(tenth) || isNaN(twelfth)) return "";
+
+  const gap = twelfth - tenth;
+
+  if (gap < 0) {
+    return `⚠️ Class XII year (${twelfth}) is before Class X year (${tenth}).`;
+  }
+
+  if (gap < 2) {
+    return `⚠️ Only ${gap} year(s) between Class X and XII. Normally it takes 2 years. Please explain below.`;
+  }
+
+  if (gap > 4) {
+    return `⚠️ ${gap - 2} extra year(s) between Class X and XII. Please explain any gap or delay below.`;
+  }
+
+  return "";
+} 
 
 export default function Step2Education({ data, update, onNext, onBack }) {
 
@@ -84,6 +106,9 @@ export default function Step2Education({ data, update, onNext, onBack }) {
     data.degrees && data.degrees.length > 0
       ? data.degrees
       : [emptyDegree()]
+  );
+  const [schoolGapReason, setSchoolGapReason] = useState(
+  data.schoolGapReason || ""
   );
 
   // sync Class XII / X fields normally
@@ -141,8 +166,13 @@ export default function Step2Education({ data, update, onNext, onBack }) {
     if (!data.tenthBoard || !data.tenthMarks || !data.tenthYear) {
       alert("Please fill all Class X fields."); return;
     }
+    const schoolWarning = getTenthTwelfthWarning(data);
+    if (schoolWarning && !schoolGapReason.trim()) {
+    alert("Please explain the gap between Class X and XII.");
+    return;
+    }
 
-    update({ degrees });
+    update({ degrees, schoolGapReason });
     onNext();
   };
 
@@ -402,6 +432,48 @@ export default function Step2Education({ data, update, onNext, onBack }) {
           />
         </div>
       </div>
+
+      {/* ── Class X–XII Gap Warning ── */}
+{getTenthTwelfthWarning(data) && (
+  <div className="edu-gap-block">
+    <div className="edu-gap-warning">
+      {getTenthTwelfthWarning(data)}
+    </div>
+
+    <div className="form-group" style={{ marginBottom: 0 }}>
+      <label className="edu-gap-label">
+        Reason for Gap between Class X and XII *
+        <span className="edu-gap-required">
+          Required to proceed
+        </span>
+      </label>
+
+      <textarea
+        value={schoolGapReason}
+        onChange={(e) => setSchoolGapReason(e.target.value)}
+        placeholder="e.g. Took a drop year, health issues, repeated class, family reasons..."
+        rows={3}
+        required
+        style={{
+          width: "100%",
+          padding: "10px 13px",
+          border: "2px solid #f59e0b",
+          borderRadius: "10px",
+          fontSize: "0.9rem",
+          fontFamily: "inherit",
+          resize: "vertical",
+          outline: "none",
+          background: "white",
+          boxSizing: "border-box"
+        }}
+      />
+
+      <span className="form-hint">
+        💡 This information is confidential and used only for verification.
+      </span>
+    </div>
+  </div>
+)}
 
       {/* ── Navigation ── */}
       <div className="step-buttons">
