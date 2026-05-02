@@ -25,7 +25,7 @@ export default function Navbar() {
             </div>
 
             <button
-              onClick={() => navigate("/apply")}
+              onClick={() => navigate("/my-application")}
               className="navbar-primary"
             >
               📊 My Application

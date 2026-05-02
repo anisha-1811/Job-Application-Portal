@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { auth } from "../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { loginToBackend } from "../services/api";
@@ -6,41 +6,50 @@ import { loginToBackend } from "../services/api";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [currentUser,   setCurrentUser]   = useState(null);
-  const [applicantId,   setApplicantId]   = useState(
+  const [currentUser, setCurrentUser] = useState(null);
+  const [applicantId, setApplicantId] = useState(
     localStorage.getItem("jp_applicant_id") || null
   );
   const [loading, setLoading] = useState(true);
+
+  const hasCalledBackend = useRef(false); // 🔥 IMPORTANT
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
 
       if (user) {
-        // If we don't have a token yet, call backend to register/login
         const existingToken = localStorage.getItem("jp_token");
-        if (!existingToken) {
+
+        // ✅ Prevent duplicate calls
+        if (!existingToken && !hasCalledBackend.current) {
+          hasCalledBackend.current = true;
+
           try {
             const data = await loginToBackend(
               user.uid,
               user.email,
               user.displayName || ""
             );
+
             if (data.success) {
-              localStorage.setItem("jp_token",        data.token);
+              localStorage.setItem("jp_token", data.token);
               localStorage.setItem("jp_applicant_id", data.applicant_id);
               setApplicantId(data.applicant_id);
+
               console.log("✅ Backend login:", data.applicant_id);
             }
           } catch (err) {
-            console.error("Backend login failed:", err.message);
+            console.error("❌ Backend login failed:", err.message);
           }
         }
       } else {
-        // User logged out — clear everything
         localStorage.removeItem("jp_token");
         localStorage.removeItem("jp_applicant_id");
         setApplicantId(null);
+        setCurrentUser(null);
+
+        hasCalledBackend.current = false; // reset
       }
 
       setLoading(false);
@@ -51,9 +60,13 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     await signOut(auth);
+
     localStorage.removeItem("jp_token");
     localStorage.removeItem("jp_applicant_id");
+
     setApplicantId(null);
+    setCurrentUser(null);
+    hasCalledBackend.current = false; // reset
   };
 
   if (loading) {
