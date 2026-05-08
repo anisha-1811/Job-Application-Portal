@@ -86,7 +86,7 @@ export default function HomePage() {
               </button>
 
               <button
-                onClick={() => navigate("/apply")}
+                onClick={() => navigate("/my-application")}
                 className="nav-btn-filled"
               >
                 My Application
