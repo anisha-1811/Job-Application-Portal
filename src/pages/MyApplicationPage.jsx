@@ -80,8 +80,8 @@ export default function MyApplicationPage() {
       title: "🎓 Degrees",
       rows: Array.isArray(appData.degrees) && appData.degrees.length > 0
         ? appData.degrees.map(d => [
-            `Degree ${d.degree_order}`,
-            `${d.degree_type} in ${d.branch} — ${d.institution} | CGPA: ${d.cgpa} | Year: ${d.passing_year}`
+            `Degree ${d.degreeOrder}`,
+  `${d.degree} in ${d.branch} — ${d.institution} | CGPA: ${d.cgpa} | Year: ${d.passingYear}`
           ])
         : [["Degrees", "—"]]
     },
