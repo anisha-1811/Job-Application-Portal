@@ -1,124 +1,169 @@
-<div align="center">
-
 # 🎓 Career Portal — Job Application Portal
 
-**A modern, full-stack job application platform built with React 19 and Firebase**
+A full-stack web application that lets candidates fill out, submit, and track their job applications through a clean multi-step form. Built with React, Node.js, Firebase Auth, and MySQL.
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Firebase](https://img.shields.io/badge/Firebase-12-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](YOUR_VERCEL_URL_HERE)
-
-### 🌐 [Live Demo →](https://job-application-portal-alpha.vercel.app)
-
-[Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure) · [Deploy](#️-deployment) · [Firebase Setup](#-firebase-setup)
-
-</div>
+🔗 **Live Demo:** [job-application-portal-alpha.vercel.app](https://job-application-portal-alpha.vercel.app/my-application)
 
 ---
 
-## ✨ Features
+## 📸 Features
 
-- 🔐 **Authentication** — Email/password login and one-click Google Sign-In via Firebase Auth
-- 🛡️ **Protected Routes** — Unauthenticated users are automatically redirected to login
-- 📋 **5-Step Application Form** — Guided multi-step flow covering every section of a job application
-- 📊 **Visual Progress Bar** — Step indicator so applicants always know where they are
-- 👁️ **Review Before Submit** — Full summary table of all entries before final submission
-- 🎫 **Unique Application ID** — Every submission generates a unique tracking ID
-- 📱 **Responsive Design** — Works cleanly across desktop and mobile screens
-- 🎨 **Polished UI** — Custom CSS with consistent design tokens, smooth transitions, and hover effects
-- 🔒 **Secure Config** — Firebase credentials managed via environment variables, never hardcoded
+- 🔐 **Firebase Authentication** — Google/email login with JWT session management
+- 📋 **5-Step Application Form** — Personal info, Education, Experience, Documents, Review
+- 💾 **Auto-save to MySQL** — All form data persisted to a cloud database (Railway)
+- 📊 **My Application Page** — View your full submitted application anytime
+- ✅ **Application Status Tracking** — Track status from Submitted → Under Review → Shortlisted → Selected
+- 📱 **Responsive Design** — Works on desktop and mobile
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
-| Layer | Technology |
+### Frontend
+| Technology | Purpose |
 |---|---|
-| Frontend Framework | React 19 |
-| Routing | React Router DOM v7 |
-| Authentication | Firebase Auth v12 (Email + Google OAuth) |
-| Database | Cloud Firestore |
-| Styling | Pure CSS (modular, per-component) |
-| Forms | Controlled components with HTML5 validation |
-| Build Tool | Create React App (react-scripts 5) |
-| Deployment | Vercel |
+| React 19 | UI framework |
+| React Router DOM v7 | Client-side routing |
+| Firebase v12 | Authentication (Google/Email) |
+| Axios | HTTP requests to backend |
+| React Hook Form | Form state management |
+| Lucide React | Icons |
+| Vercel | Deployment |
+
+### Backend
+| Technology | Purpose |
+|---|---|
+| Node.js + Express 5 | REST API server |
+| MySQL2 | Database driver |
+| JSON Web Token (JWT) | Session authentication |
+| bcryptjs | Password hashing |
+| dotenv | Environment variables |
+| Railway | MySQL database hosting |
+| Render | Backend deployment |
 
 ---
 
-## 📁 Project Structure
+## 🗂️ Project Structure
 
 ```
-src/
+Job-Application-Portal/          # Frontend (React)
+├── src/
+│   ├── components/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   └── shared/
+│   │       ├── Navbar.jsx
+│   │       └── ProgressBar.jsx
+│   ├── pages/
+│   │   ├── HomePage.jsx
+│   │   ├── ApplicationPage.jsx
+│   │   ├── MyApplicationPage.jsx
+│   │   └── SuccessPage.jsx
+│   ├── context/
+│   │   └── AuthContext.js        # Firebase + JWT auth state
+│   ├── services/
+│   │   └── api.js                # Axios API calls
+│   └── firebase/
+│       └── config.js             # Firebase config
 │
-├── components/
-│   ├── auth/
-│   │   ├── Login.jsx           # Email & Google login form
-│   │   ├── Register.jsx        # New user registration
-│   │   ├── ProtectedRoute.jsx  # Auth guard for private routes
-│   │   └── Auth.css
-│   │
-│   ├── shared/
-│   │   ├── Navbar.jsx          # Sticky top navigation bar
-│   │   ├── ProgressBar.jsx     # 5-step visual indicator
-│   │   └── StepForm.css        # Shared form styles across all steps
-│   │
-│   └── steps/
-│       ├── Step1Personal.jsx   # Name, DOB, gender, address
-│       ├── Step2Education.jsx  # Degree, boards, CGPA
-│       ├── Step3Experience.jsx # Skills, internships, projects
-│       ├── Step4Documents.jsx  # Resume, photo, ID proof upload
-│       └── Step5Review.jsx     # Full summary table + submit
-│
-├── context/
-│   └── AuthContext.js          # Global auth state (React Context API)
-│
-├── firebase/
-│   └── config.js               # Firebase init using env variables
-│
-├── pages/
-│   ├── HomePage.jsx            # Landing page with hero & how-it-works
-│   ├── ApplicationPage.jsx     # Hosts the 5-step form + progress bar
-│   └── SuccessPage.jsx         # Confirmation page with Application ID
-│
-├── App.jsx                     # All route definitions
-└── index.js                    # React DOM entry point
+job-portal-backend/              # Backend (Node.js)
+├── controllers/
+│   ├── authController.js         # Login/register logic
+│   └── applicationController.js  # Save & get application
+├── routes/
+│   ├── auth.js
+│   └── application.js
+├── middleware/
+│   └── verifyToken.js            # JWT verification
+├── config/
+│   └── db.js                     # MySQL connection pool
+└── server.js                     # Express app entry point
 ```
+
+---
+
+## 🗄️ Database Schema
+
+The MySQL database (`job_portal`) contains the following tables:
+
+| Table | Description |
+|---|---|
+| `applicants` | Core user table — stores Firebase UID, email, applicant ID |
+| `personal_info` | Name, DOB, gender, phone, address |
+| `qualifications` | Class X, XII, degrees with grades and years |
+| `skills` | List of technical skills |
+| `work_experience` | Company, role, dates, description |
+| `internships` | Organisation, role, dates |
+| `projects` | Title, URL, tech stack, description |
+| `certificates` | Cert name, issuer, credential URL |
+| `profile_links` | LinkedIn, GitHub, portfolio links |
+| `documents` | Resume, photo, ID proof file links |
+| `applications` | Application code, status, submission timestamp |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js v18+
+- MySQL (local) or Railway MySQL account
+- Firebase project with Authentication enabled
 
-- [Node.js](https://nodejs.org/) v16 or higher
-- A [Firebase](https://console.firebase.google.com/) project (free Spark plan works)
+---
 
-### 1. Clone the repo
+### 1. Clone the repositories
 
 ```bash
 git clone https://github.com/anisha-1811/Job-Application-Portal.git
-cd Job-Application-Portal
+git clone https://github.com/anisha-1811/job-portal-backend.git
 ```
 
-### 2. Install dependencies
+---
 
-> React 19 and react-scripts 5 have a known peer dependency conflict — the flag below handles it:
+### 2. Backend Setup
 
 ```bash
-npm install --legacy-peer-deps
+cd job-portal-backend
+npm install
 ```
 
-### 3. Set up environment variables
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and fill in your Firebase credentials (see [Firebase Setup](#-firebase-setup)):
+Create a `.env` file in the root:
 
 ```env
-REACT_APP_FIREBASE_API_KEY=your_api_key
+DB_HOST=your_railway_mysql_host
+DB_PORT=your_railway_mysql_port
+DB_USER=your_db_username
+DB_PASSWORD=your_db_password
+DB_NAME=job_portal
+JWT_SECRET=your_secret_key_here
+PORT=5000
+```
+
+Start the server:
+
+```bash
+npm run dev       # development (nodemon)
+npm start         # production
+```
+
+Server runs at `http://localhost:5000`
+
+---
+
+### 3. Frontend Setup
+
+```bash
+cd Job-Application-Portal
+npm install
+```
+
+Create a `.env` file in the root:
+
+```env
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
 REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 REACT_APP_FIREBASE_PROJECT_ID=your_project_id
 REACT_APP_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
@@ -126,115 +171,128 @@ REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 REACT_APP_FIREBASE_APP_ID=your_app_id
 ```
 
-### 4. Run locally
+Start the app:
 
 ```bash
 npm start
 ```
 
-App opens at **http://localhost:3000** 🎉
+App runs at `http://localhost:3000`
 
 ---
 
-## 🔥 Firebase Setup
+### 4. Database Setup
 
-1. Go to [Firebase Console](https://console.firebase.google.com/) → **Create a project**
-2. **Authentication** → Get started → Enable **Email/Password** and **Google** providers
-3. **Firestore Database** → Create database → choose region → start in **test mode**
-4. ⚙️ **Project Settings** → Your apps → click `</>` → Register app → copy the config values into your `.env` file
+Run this on your MySQL database to add the required column if it doesn't exist:
+
+```sql
+ALTER TABLE qualifications
+ADD COLUMN degree_label VARCHAR(50) DEFAULT ''
+AFTER qualification_type;
+```
+
+---
+
+## 🌐 API Endpoints
+
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/login` | Login or register via Firebase UID |
+
+**Request body:**
+```json
+{
+  "firebase_uid": "abc123",
+  "email": "user@example.com",
+  "display_name": "Anisha"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "token": "eyJhbGc...",
+  "applicant_id": "APP00000001",
+  "email": "user@example.com"
+}
+```
+
+---
+
+### Application
+All routes require `Authorization: Bearer <token>` header.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/application/save` | Save/update full application |
+| GET | `/api/application/get` | Fetch saved application data |
+
+---
+
+## 🔐 Authentication Flow
+
+```
+User logs in via Firebase
+        ↓
+Frontend calls POST /api/auth/login with Firebase UID + email
+        ↓
+Backend creates/finds user in MySQL → issues JWT token
+        ↓
+JWT stored in localStorage as jp_token
+        ↓
+All subsequent API calls include JWT in Authorization header
+        ↓
+verifyToken middleware validates JWT on protected routes
+```
 
 ---
 
 ## ☁️ Deployment
 
-### Deploy to Vercel (Recommended — free & fast)
+### Frontend — Vercel
+1. Push to GitHub
+2. Import repo on [vercel.com](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Vercel auto-deploys on every `git push`
 
-**1.** Push your code to GitHub (`.env` is already gitignored by Create React App — your keys stay safe)
+### Backend — Render
+1. Push to GitHub
+2. Create a new **Web Service** on [render.com](https://render.com)
+3. Set build command: `npm install`
+4. Set start command: `node server.js`
+5. Add environment variables in Render dashboard
 
-**2.** Go to [vercel.com](https://vercel.com) → **Sign in with GitHub** → **Add New Project** → import this repo
+### Database — Railway
+1. Create a new MySQL service on [railway.app](https://railway.app)
+2. Copy connection credentials to backend `.env`
+3. Run schema SQL to create all tables
 
-**3.** In Vercel's project settings, open **Environment Variables** and add all 6 Firebase keys from your `.env` file
+---
 
-**4.** Set the **Build Command** to:
+## 📋 Application Status Flow
+
 ```
-npm install --legacy-peer-deps && npm run build
-```
-
-**5.** Click **Deploy** — Vercel gives you a live URL instantly
-
-**6.** Copy your Vercel URL and replace both `YOUR_VERCEL_URL_HERE` placeholders at the top of this README, then push
-
-### Deploy to Firebase Hosting (Alternative)
-
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-npm run build
-firebase deploy
+draft → submitted → under_review → shortlisted → selected
+                                               → rejected
 ```
 
 ---
 
-## 🗺 App Flow
+## 🔗 Repository Links
 
-```
-/ (Home Page)
-│
-├── /register  ──→  Create account
-├── /login     ──→  Sign in
-│                       │
-│                       ↓
-└──────────────── /apply  (Protected — login required)
-                      │
-                      ├── Step 1 · Personal Info
-                      ├── Step 2 · Education
-                      ├── Step 3 · Skills & Experience
-                      ├── Step 4 · Document Uploads
-                      └── Step 5 · Review & Submit
-                                      │
-                                      ↓
-                                 /success
-                          (Unique Application ID)
-```
+- **Frontend:** [github.com/anisha-1811/Job-Application-Portal](https://github.com/anisha-1811/Job-Application-Portal)
+- **Backend:** [github.com/anisha-1811/job-portal-backend](https://github.com/anisha-1811/job-portal-backend)
 
 ---
 
-## 📄 What the Form Collects
+## 👩‍💻 Author
 
-| Step | Section | Fields |
-|------|---------|--------|
-| 1 | Personal Info | First name, last name, DOB, gender, phone, address, city, state, PIN, nationality |
-| 2 | Education | Degree, branch, institution, CGPA, passing year, 12th & 10th board & marks |
-| 3 | Experience | Technical skills, work experience, internships, projects, achievements |
-| 4 | Documents | Resume/CV, passport photo, ID proof (Aadhaar / PAN / Passport) |
-| 5 | Review | Complete summary — verify all fields before final submission |
+**Anisha** — [anisha18112006@gmail.com](mailto:anisha18112006@gmail.com)
 
 ---
 
-## 🤝 Contributing
+## 📄 License
 
-Contributions are welcome!
-
-```bash
-git checkout -b feature/your-feature-name
-git commit -m "feat: describe your change"
-git push origin feature/your-feature-name
-# Open a Pull Request
-```
-
----
-
-## 📝 License
-
-This project is licensed under the **MIT License** — feel free to use, modify, and distribute.
-
----
-
-<div align="center">
-
-Built with ❤️ by [Anisha](https://github.com/anisha-1811) &nbsp;·&nbsp; Powered by React & Firebase
-
-⭐ If this helped you, give it a star — it means a lot!
-
-</div>
+This project is open source and available under the [MIT License](LICENSE).
