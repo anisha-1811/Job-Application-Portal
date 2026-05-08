@@ -32,70 +32,104 @@ const emptyDegree = () => ({
 // Returns a warning string or "" if everything looks fine
 function getYearWarning(degrees, index) {
   const cur = degrees[index];
+
   if (!cur.degree || !cur.passingYear) return "";
 
   const curYear = parseInt(cur.passingYear, 10);
-  if (isNaN(curYear)) return "";
 
-  // Check against PREVIOUS degree
+  // ✅ ONLY validate when exactly 4 digits typed
+  if (
+    isNaN(curYear) ||
+    cur.passingYear.toString().length !== 4
+  ) {
+    return "";
+  }
+
+  // ✅ Check against PREVIOUS degree
   if (index > 0) {
     const prev = degrees[index - 1];
-    if (!prev.passingYear) return "";
+
+    if (
+      !prev.passingYear ||
+      prev.passingYear.toString().length !== 4
+    ) {
+      return "";
+    }
+
     const prevYear = parseInt(prev.passingYear, 10);
+
     if (isNaN(prevYear)) return "";
 
     const gap = curYear - prevYear;
-    const minExpected = DEGREE_MIN_YEARS[cur.degree] || 1;
+    const minExpected =
+      DEGREE_MIN_YEARS[cur.degree] || 1;
 
     if (gap < 0) {
       return `⚠️ Passing year (${curYear}) is before your previous degree (${prevYear}). Please check.`;
     }
+
     if (gap < minExpected) {
       return `⚠️ Only ${gap} year(s) gap between degrees. A ${cur.degree} typically takes ${minExpected} year(s). Please explain below.`;
     }
+
     if (gap > minExpected + 4) {
-      return `⚠️ ${gap - minExpected} extra year(s) beyond expected duration. If there was a gap year, career break, or backlog, please explain below.`;
+      return `⚠️ ${gap - minExpected} extra year(s) beyond expected duration. Please explain any gap below.`;
     }
   }
 
-  // Check against Class 12 passing year
+  // ✅ Check against Class 12 passing year
   const twYear = parseInt(degrees._twelthYear, 10);
-  if (!isNaN(twYear) && index === 0) {
+
+  if (
+    !isNaN(twYear) &&
+    degrees._twelthYear &&
+    degrees._twelthYear.toString().length === 4 &&
+    index === 0
+  ) {
     const gap = curYear - twYear;
-    const minExpected = DEGREE_MIN_YEARS[cur.degree] || 1;
+    const minExpected =
+      DEGREE_MIN_YEARS[cur.degree] || 1;
 
     if (gap < 0) {
       return `⚠️ Degree passing year (${curYear}) is before your Class XII year (${twYear}).`;
     }
+
     if (gap < minExpected) {
       return `⚠️ Only ${gap} year(s) after Class XII. A ${cur.degree} typically needs ${minExpected} year(s). Please explain below.`;
     }
+
     if (gap > minExpected + 4) {
-      return `⚠️ ${gap - minExpected} extra year(s) beyond expected. Please explain any gap year or break below.`;
+      return `⚠️ ${gap - minExpected} extra year(s) beyond expected. Please explain any gap below.`;
     }
   }
 
   return "";
-}
+} 
 function getTenthTwelfthWarning(data) {
-  const tenth = parseInt(data.tenthYear, 10);
-  const twelfth = parseInt(data.twelthYear, 10);
+  const tenthYear = data.tenthYear;
+  const twelthYear = data.twelthYear;
 
-  if (isNaN(tenth) || isNaN(twelfth)) return "";
+  // ✅ ONLY validate when both years are exactly 4 digits
+  if (
+    !tenthYear || tenthYear.toString().length !== 4 ||
+    !twelthYear || twelthYear.toString().length !== 4
+  ) return "";
 
-  const gap = twelfth - tenth;
+  const y10 = parseInt(tenthYear, 10);
+  const y12 = parseInt(twelthYear, 10);
 
-  if (gap < 0) {
-    return `⚠️ Class XII year (${twelfth}) is before Class X year (${tenth}).`;
-  }
+  if (isNaN(y10) || isNaN(y12)) return "";
 
-  if (gap < 2) {
-    return `⚠️ Only ${gap} year(s) between Class X and XII. Normally it takes 2 years. Please explain below.`;
-  }
+  const gap = y12 - y10;
 
-  if (gap > 4) {
-    return `⚠️ ${gap - 2} extra year(s) between Class X and XII. Please explain any gap or delay below.`;
-  }
+  if (gap < 0)
+    return `⚠️ Class XII year (${y12}) is before Class X year (${y10}). Please check.`;
+
+  if (gap < 2)
+    return `⚠️ Only ${gap} year(s) between Class X (${y10}) and Class XII (${y12}). Minimum expected is 2 years. Please explain below.`;
+
+  if (gap > 4)
+    return `⚠️ ${gap - 2} extra year(s) between Class X and Class XII. Please explain any gap below.`;
 
   return "";
 } 
