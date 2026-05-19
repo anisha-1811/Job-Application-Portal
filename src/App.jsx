@@ -9,6 +9,7 @@ import Register          from "./components/auth/Register";
 import ApplicationPage   from "./pages/ApplicationPage";
 import SuccessPage       from "./pages/SuccessPage";
 import MyApplicationPage from "./pages/MyApplicationPage";
+import ResumeGenerator from "./pages/ResumeGenerator";
 
 function App() {
   return (
