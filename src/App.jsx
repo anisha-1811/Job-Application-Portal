@@ -9,7 +9,7 @@ import Register          from "./components/auth/Register";
 import ApplicationPage   from "./pages/ApplicationPage";
 import SuccessPage       from "./pages/SuccessPage";
 import MyApplicationPage from "./pages/MyApplicationPage";
-import ResumeGenerator from "./pages/ResumeGenerator";
+import ResumeGenerator   from "./pages/ResumeGenerator";
 
 function App() {
   return (
@@ -17,8 +17,8 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
-          <Route path="/"        element={<HomePage />} />
-          <Route path="/login"   element={<Login />} />
+          <Route path="/"         element={<HomePage />} />
+          <Route path="/login"    element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Protected routes */}
@@ -43,6 +43,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <SuccessPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ✅ NEW — AI Resume Generator (Phase 2) */}
+          <Route
+            path="/resume-generator"
+            element={
+              <ProtectedRoute>
+                <ResumeGenerator />
               </ProtectedRoute>
             }
           />
