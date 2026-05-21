@@ -1,32 +1,36 @@
-import html2pdf from "html2pdf.js";
-
-/**
- * Converts the resume preview DOM node to a downloadable PDF.
- * @param {HTMLElement} element - The ref.current from ResumePreview
- * @param {string} filename - Name for the downloaded file
- */
 export async function downloadResumePDF(element, filename = "resume") {
+  const { default: html2canvas } = await import("html2canvas");
+  const { default: jsPDF } = await import("jspdf");
+
   const safeName = filename
     .toLowerCase()
     .replace(/\s+/g, "_")
     .replace(/[^a-z0-9_]/g, "");
 
-  const options = {
-    margin: [8, 8, 8, 8],             // top, right, bottom, left (mm)
-    filename: `${safeName}_resume.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: {
-      scale: 2,                        // higher = sharper
-      useCORS: true,
-      letterRendering: true,
-    },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait",
-    },
-    pagebreak: { mode: ["avoid-all", "css", "legacy"] },
-  };
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+    letterRendering: true,
+    backgroundColor: "#ffffff",
+  });
 
-  await html2pdf().set(options).from(element).save();
+  const imgData = canvas.toDataURL("image/jpeg", 0.98);
+  const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+
+  const pageWidth  = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imgWidth   = pageWidth - 16;
+  const imgHeight  = (canvas.height * imgWidth) / canvas.width;
+
+  let y = 8;
+  let remaining = imgHeight;
+
+  while (remaining > 0) {
+    pdf.addImage(imgData, "JPEG", 8, y, imgWidth, Math.min(imgHeight, pageHeight - 16));
+    remaining -= (pageHeight - 16);
+    y = -(imgHeight - remaining);
+    if (remaining > 0) pdf.addPage();
+  }
+
+  pdf.save(`${safeName}_resume.pdf`);
 }
