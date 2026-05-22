@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Mail, Phone, MapPin, Linkedin, Github } from "lucide-react";
+import { Mail, Phone, MapPin, Link2, Github } from "lucide-react";
 
 // Safely parse either a JSON string or already-parsed object
 function parseResume(data) {
@@ -65,7 +65,7 @@ const ResumePreview = forwardRef(({ data, rawForm }, ref) => {
           )}
           {(linkedin || rawForm.linkedin) && (
             <span className="flex items-center gap-1">
-              <Linkedin size={11} /> {(linkedin || rawForm.linkedin).replace(/https?:\/\/(www\.)?/, "")}
+              <Link2 size={11} /> {(linkedin || rawForm.linkedin).replace(/https?:\/\/(www\.)?/, "")}
             </span>
           )}
           {(github || rawForm.github) && (
