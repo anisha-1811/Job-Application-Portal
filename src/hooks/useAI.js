@@ -1,138 +1,88 @@
-// src/hooks/useAI.js
-// ─────────────────────────────────────────────────────────────────────────────
-// Reusable hook that wraps any AI service call with loading / error / data
-// state so your components stay clean.
-//
-// Base usage:
-//   const { data, loading, error, execute } = useAI(generateResume);
-//   <button onClick={() => execute(formData)}>Generate Resume</button>
-//
-// Or use the pre-bound convenience hooks at the bottom of this file:
-//   const { data, loading, error, execute } = useResumeGenerator();
-// ─────────────────────────────────────────────────────────────────────────────
-
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import {
   generateResume,
   checkATSScore,
-  getJobMatches,
   generateCoverLetter,
-  getMockInterview,
   analyzeSkillGap,
+  getMockInterview,
 } from "../services/ai";
 
-// ── Core hook ─────────────────────────────────────────────────────────────────
+export function useAI() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
 
-/**
- * @param {Function} aiServiceFn   — any exported function from services/ai.js
- * @param {Object}   [options]
- * @param {Function} [options.onSuccess]  — called with (data) on success
- * @param {Function} [options.onError]    — called with (Error) on failure
- */
-const useAI = (aiServiceFn, options = {}) => {
-  const { onSuccess, onError } = options;
-
-  const [state, setState] = useState({
-    data: null,
-    loading: false,
-    error: null,
-    called: false, // tracks whether execute() has ever been called
-  });
-
-  // Prevents stale setState calls if the component unmounts mid-request
-  const cancelledRef = useRef(false);
-
-  /**
-   * execute(...args)
-   * Call signature mirrors the wrapped AI service function exactly.
-   * Returns the result on success, undefined on failure (error is in state).
-   */
-  const execute = useCallback(
-    async (...args) => {
-      cancelledRef.current = false;
-
-      setState((prev) => ({
-        ...prev,
-        loading: true,
-        error: null,
-        called: true,
-      }));
-
-      try {
-        const result = await aiServiceFn(...args);
-        if (cancelledRef.current) return;
-
-        setState({ data: result, loading: false, error: null, called: true });
-        onSuccess?.(result);
-        return result;
-      } catch (err) {
-        if (cancelledRef.current) return;
-
-        const error = err instanceof Error ? err : new Error(String(err));
-        setState({ data: null, loading: false, error, called: true });
-        onError?.(error);
-        // Not re-thrown — callers read the error from state
+  const execute = useCallback(async (apiFn, ...args) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await apiFn(...args);
+      if (result.success) {
+        setData(result.data);
+        return result.data;
+      } else {
+        throw new Error(result.error || "AI request failed");
       }
-    },
-    [aiServiceFn, onSuccess, onError]
-  );
+    } catch (err) {
+      const msg = err.response?.data?.error || err.message || "Something went wrong";
+      setError(msg);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  /** Reset back to the initial empty state */
   const reset = useCallback(() => {
-    setState({ data: null, loading: false, error: null, called: false });
+    setData(null);
+    setError(null);
+    setLoading(false);
   }, []);
 
-  /**
-   * Cancel an in-flight request (best-effort — stops setState only).
-   * Useful for unmount cleanup in useEffect.
-   */
-  const cancel = useCallback(() => {
-    cancelledRef.current = true;
-    setState((prev) => ({ ...prev, loading: false }));
-  }, []);
+  return { loading, error, data, execute, reset };
+}
 
-  return { ...state, execute, reset, cancel };
-};
+export function useResumeGenerator() {
+  const { loading, error, data, execute, reset } = useAI();
+  const generate = useCallback(
+    (formData) => execute(generateResume, formData),
+    [execute]
+  );
+  return { loading, error, resumeData: data, generate, reset };
+}
 
-export default useAI;
+export function useATSScore() {
+  const { loading, error, data, execute, reset } = useAI();
+  const analyze = useCallback(
+    (resumeFile, jobDescription, jobTitle) =>
+      execute(checkATSScore, resumeFile, jobDescription, jobTitle),
+    [execute]
+  );
+  return { loading, error, atsData: data, analyze, reset };
+}
 
-// ── Convenience hooks — one per AI feature ────────────────────────────────────
-// Import these directly in your pages/components instead of useAI + import.
-//
-// Pattern:
-//   const { data: resume, loading, error, execute: generate } = useResumeGenerator({
-//     onSuccess: (data) => console.log('Resume ready!', data),
-//   });
-//   <button onClick={() => generate(formData)}>Generate Resume</button>
+export function useCoverLetter() {
+  const { loading, error, data, execute, reset } = useAI();
+  const generate = useCallback(
+    (payload) => execute(generateCoverLetter, payload),
+    [execute]
+  );
+  return { loading, error, letterData: data, generate, reset };
+}
 
-/** Phase 2 — AI Resume Generator
- *  execute(formData)  → { resumeText, sections }
- */
-export const useResumeGenerator = (options) => useAI(generateResume, options);
+export function useSkillGap() {
+  const { loading, error, data, execute, reset } = useAI();
+  const analyze = useCallback(
+    (payload) => execute(analyzeSkillGap, payload),
+    [execute]
+  );
+  return { loading, error, gapData: data, analyze, reset };
+}
 
-/** Phase 3 — ATS Score Checker
- *  execute(resumeFile, jobDescriptionString)  → { score, grade, errors, suggestions, … }
- */
-export const useATSChecker = (options) => useAI(checkATSScore, options);
-
-/** Phase 4 — Job Matcher
- *  execute(formData, jobListings[])  → sorted array of { jobId, matchScore, … }
- */
-export const useJobMatcher = (options) => useAI(getJobMatches, options);
-
-/** Phase 6 — Cover Letter Generator
- *  execute(formData, jobDetails, tone)  → { coverLetter, wordCount }
- */
-export const useCoverLetter = (options) => useAI(generateCoverLetter, options);
-
-/** Phase 6 — Mock Interview
- *  execute({ role, level, skills, interviewType })
- *  → [{ question, modelAnswer, tips }]
- */
-export const useMockInterview = (options) => useAI(getMockInterview, options);
-
-/** Phase 6 — Skill Gap Analysis
- *  execute({ currentSkills, targetRole, jobDescription })
- *  → { missingSkills, partialSkills, strongSkills, learningResources, estimatedTimeToReady }
- */
-export const useSkillGap = (options) => useAI(analyzeSkillGap, options);
+export function useMockInterview() {
+  const { loading, error, data, execute, reset } = useAI();
+  const start = useCallback(
+    (payload) => execute(getMockInterview, payload),
+    [execute]
+  );
+  return { loading, error, interviewData: data, start, reset };
+}
