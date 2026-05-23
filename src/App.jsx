@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-import HomePage          from "./pages/HomePage";
-import Login             from "./components/auth/Login";
-import Register          from "./components/auth/Register";
-import ApplicationPage   from "./pages/ApplicationPage";
-import SuccessPage       from "./pages/SuccessPage";
+import HomePage from "./pages/HomePage";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import ApplicationPage from "./pages/ApplicationPage";
+import SuccessPage from "./pages/SuccessPage";
 import MyApplicationPage from "./pages/MyApplicationPage";
-import ResumeGenerator   from "./pages/ResumeGenerator";
+import ResumeGenerator from "./pages/ResumeGenerator";
+import ATSScoreChecker from "./pages/ATSScoreChecker";
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
-          <Route path="/"         element={<HomePage />} />
-          <Route path="/login"    element={<Login />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Protected routes */}
@@ -30,6 +31,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/my-application"
             element={
@@ -38,6 +40,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/success"
             element={
@@ -53,6 +56,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <ResumeGenerator />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/ats-checker"
+            element={
+              <ProtectedRoute>
+                <ATSScoreChecker />
               </ProtectedRoute>
             }
           />
