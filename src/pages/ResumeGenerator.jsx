@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useAI } from "../hooks/useAI";
+import { useResumeGenerator } from "../hooks/useAI";
 import ResumePreview from "../components/resume/ResumePreview";
 import { downloadResumePDF } from "../utils/pdfExport";
 import {
@@ -16,7 +16,7 @@ const emptyProject = () => ({
 const emptyCert = () => ({ name: "", issuer: "", year: "" });
 
 export default function ResumeGenerator() {
-  const { generateResume } = useAI();
+  const { loading, error, resumeData, generate, reset } = useResumeGenerator();
   const previewRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -72,12 +72,9 @@ export default function ResumeGenerator() {
 
   // ── AI Generation ───────────────────────────────────────────
   const handleGenerate = async () => {
-    const { data, error } = await generateResume(formData);
-    if (error) {
-      alert("Generation failed: " + error);
-      return;
-    }
-    setGeneratedResume(data);
+    const result = await generate(formData);
+    if (!result) { alert("Generation failed: " + (error || "Unknown error")); return; }
+    setGeneratedResume(result); 
     setTimeout(() => {
       previewRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
@@ -370,10 +367,10 @@ export default function ResumeGenerator() {
             {/* Generate Button */}
             <button
               onClick={handleGenerate}
-              disabled={generateResume.loading}
+              disabled={loading}
               className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-2xl font-semibold text-base flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
             >
-              {generateResume.loading
+              {loading
                 ? <><Loader2 size={18} className="animate-spin" /> Generating with Gemini AI...</>
                 : <><Sparkles size={18} /> Generate My Resume</>}
             </button>
