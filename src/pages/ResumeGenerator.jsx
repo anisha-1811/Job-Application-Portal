@@ -16,7 +16,7 @@ const emptyProject = () => ({
 const emptyCert = () => ({ name: "", issuer: "", year: "" });
 
 export default function ResumeGenerator() {
-  const { loading, error, resumeData, generate, reset } = useResumeGenerator();
+  const { loading, error, generate } = useResumeGenerator();
   const previewRef = useRef(null);
 
   const [formData, setFormData] = useState({

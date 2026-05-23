@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Navbar.css";
@@ -7,7 +7,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -52,6 +51,7 @@ export default function Navbar() {
             </button>
 
             <button
+              style={navLinkStyle("/my-application")}
               onClick={() => navigate("/my-application")}
               className="navbar-primary"
             >

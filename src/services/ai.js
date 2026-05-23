@@ -71,10 +71,11 @@ export const generateResume = async (formData) => {
  *   sectionScores: { contact, summary, experience, skills, education }
  * }>}
  */
-export const checkATSScore = async (resumeFile, jobDescription = "") => {
+export const checkATSScore = async (resumeFile, jobDescription = "", jobTitle = "") => {
   const form = new FormData();
   form.append("resume", resumeFile);
   if (jobDescription) form.append("jobDescription", jobDescription);
+  if (jobTitle) form.append("jobTitle", jobTitle);
 
   const { data } = await aiClient.post("/ats-score", form, {
     headers: { "Content-Type": "multipart/form-data" },
