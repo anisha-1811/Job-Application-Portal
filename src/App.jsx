@@ -12,6 +12,10 @@ import MyApplicationPage from "./pages/MyApplicationPage";
 import ResumeGenerator from "./pages/ResumeGenerator";
 import ATSScoreChecker from "./pages/ATSScoreChecker";
 import JobListingsPage from "./pages/JobListingsPage";
+import DashboardPage from "./pages/DashboardPage";
+import CoverLetterPage from "./pages/CoverLetterPage";
+import SkillGapPage from "./pages/SkillGapPage";
+import MockInterviewPage from "./pages/MockInterviewPage";
 
 function App() {
   return (
@@ -77,6 +81,42 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+          {/* ✅ Phase 5 — Dashboard */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ✅ Phase 6 — AI Tools */}
+          <Route
+            path="/cover-letter"
+            element={
+              <ProtectedRoute>
+                <CoverLetterPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/skill-gap"
+            element={
+              <ProtectedRoute>
+                <SkillGapPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mock-interview"
+            element={
+              <ProtectedRoute>
+                <MockInterviewPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthProvider>
     </Router>
