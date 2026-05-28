@@ -1,3 +1,4 @@
+// src/components/shared/Navbar.jsx — updated for Phase 4 (added Jobs link)
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -35,6 +36,14 @@ export default function Navbar() {
       <div className="navbar-right">
         {currentUser ? (
           <>
+            {/* ── Phase 4: Job Listings ── */}
+            <button
+              style={navLinkStyle("/jobs")}
+              onClick={() => navigate("/jobs")}
+            >
+              💼 Jobs
+            </button>
+
             {/* ── AI Feature Links ── */}
             <button
               style={navLinkStyle("/resume-generator")}
@@ -75,17 +84,10 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <button
-              onClick={() => navigate("/login")}
-              className="navbar-outline"
-            >
+            <button onClick={() => navigate("/login")} className="navbar-outline">
               🔐 Login
             </button>
-
-            <button
-              onClick={() => navigate("/register")}
-              className="navbar-primary"
-            >
+            <button onClick={() => navigate("/register")} className="navbar-primary">
               🚀 Apply Now
             </button>
           </>

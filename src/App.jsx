@@ -11,6 +11,7 @@ import SuccessPage from "./pages/SuccessPage";
 import MyApplicationPage from "./pages/MyApplicationPage";
 import ResumeGenerator from "./pages/ResumeGenerator";
 import ATSScoreChecker from "./pages/ATSScoreChecker";
+import JobListingsPage from "./pages/JobListingsPage";
 
 function App() {
   return (
@@ -68,6 +69,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+  path="/jobs"
+  element={
+    <ProtectedRoute>
+      <JobListingsPage />
+    </ProtectedRoute>
+  }
+/>
         </Routes>
       </AuthProvider>
     </Router>
