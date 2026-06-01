@@ -227,7 +227,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [appData, setAppData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // eslint-disable-line no-unused-vars
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
