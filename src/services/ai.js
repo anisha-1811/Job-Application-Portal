@@ -14,7 +14,7 @@ const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const aiClient = axios.create({
   baseURL: `${BASE_URL}/api/ai`,
   headers: { "Content-Type": "application/json" },
-  timeout: 60000, // Gemini free tier can be slow — give it 60 s
+  timeout: 120000, // Render free tier cold start can take 60s + Gemini processing time
 });
 
 // Attach jp_token automatically (same key used by the rest of the app)
@@ -138,12 +138,14 @@ export const getMockInterview = async ({
   level,
   skills,
   interviewType = "mixed",
+  numQuestions = 8,
 }) => {
   const { data } = await aiClient.post("/mock-interview", {
     role,
     level,
     skills,
     interviewType,
+    numQuestions,
   });
   return data;
 };
