@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getApplication } from "../services/api";
 import { generateCoverLetter } from "../services/ai";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/shared/Navbar";
 
 const TONES = [
@@ -34,6 +35,7 @@ const inputStyle = {
 
 export default function CoverLetterPage() {
   const navigate = useNavigate();
+  const { tokenReady } = useAuth();
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
     title: "", company: "", hiringManager: "", description: "", tone: "professional",
@@ -47,10 +49,11 @@ export default function CoverLetterPage() {
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 60);
+    if (!tokenReady) return;
     getApplication()
       .then(r => r.success && setProfile(r.data))
       .catch(() => {});
-  }, []);
+  }, [tokenReady]);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
