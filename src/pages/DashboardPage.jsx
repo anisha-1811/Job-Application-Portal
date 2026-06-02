@@ -223,7 +223,7 @@ function ProgressRing({ pct, size = 80, stroke = 7, color = "#6366f1" }) {
 // ── Main Dashboard ────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
-  const { currentUser } = useAuth();
+  const { currentUser, tokenReady } = useAuth();
   const navigate = useNavigate();
   const [appData, setAppData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -232,6 +232,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 60);
+    if (!tokenReady) return; // wait until JWT is stored before calling protected route
     getApplication()
       .then(res => {
         if (res.success) setAppData(res.data);
@@ -239,7 +240,7 @@ export default function DashboardPage() {
       })
       .catch(() => setError("Could not load your profile."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [tokenReady]);
 
   const userName =
     appData?.first_name
