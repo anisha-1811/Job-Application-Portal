@@ -11,6 +11,11 @@ export function AuthProvider({ children }) {
     localStorage.getItem("jp_applicant_id") || null
   );
   const [loading, setLoading] = useState(true);
+  // tokenReady = true once jp_token is confirmed to exist in localStorage
+  // Components that call protected routes should wait for this before firing
+  const [tokenReady, setTokenReady] = useState(
+    () => !!localStorage.getItem("jp_token")
+  );
 
   const hasCalledBackend = useRef(false); // 🔥 IMPORTANT
 
@@ -21,8 +26,11 @@ export function AuthProvider({ children }) {
       if (user) {
         const existingToken = localStorage.getItem("jp_token");
 
-        // ✅ Prevent duplicate calls
-        if (!existingToken && !hasCalledBackend.current) {
+        if (existingToken) {
+          // Token already present from a previous session — mark ready immediately
+          setTokenReady(true);
+        } else if (!hasCalledBackend.current) {
+          // ✅ Prevent duplicate calls
           hasCalledBackend.current = true;
 
           try {
@@ -36,6 +44,7 @@ export function AuthProvider({ children }) {
               localStorage.setItem("jp_token", data.token);
               localStorage.setItem("jp_applicant_id", data.applicant_id);
               setApplicantId(data.applicant_id);
+              setTokenReady(true); // ✅ Signal that token is now available
 
               console.log("✅ Backend login:", data.applicant_id);
             }
@@ -48,6 +57,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem("jp_applicant_id");
         setApplicantId(null);
         setCurrentUser(null);
+        setTokenReady(false);
 
         hasCalledBackend.current = false; // reset
       }
@@ -66,6 +76,7 @@ export function AuthProvider({ children }) {
 
     setApplicantId(null);
     setCurrentUser(null);
+    setTokenReady(false);
     hasCalledBackend.current = false; // reset
   };
 
@@ -90,7 +101,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, applicantId, logout }}>
+    <AuthContext.Provider value={{ currentUser, applicantId, tokenReady, logout }}>
       {children}
     </AuthContext.Provider>
   );
