@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getApplication } from "../services/api";
 import { getMockInterview } from "../services/ai";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/shared/Navbar";
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -139,6 +140,7 @@ function QuestionCard({ q, idx, isOpen, onToggle }) {
 
 export default function MockInterviewPage() {
   const navigate = useNavigate();
+  const { tokenReady } = useAuth();
   const [profile, setProfile] = useState(null);
   const [config, setConfig] = useState({
     role: "", level: "mid", type: "mixed", numQuestions: 8,
@@ -153,10 +155,11 @@ export default function MockInterviewPage() {
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 60);
+    if (!tokenReady) return;
     getApplication()
       .then(r => { if (r.success && r.data) setProfile(r.data); })
       .catch(() => {});
-  }, []);
+  }, [tokenReady]);
 
   const set = (k, v) => setConfig(c => ({ ...c, [k]: v }));
 
