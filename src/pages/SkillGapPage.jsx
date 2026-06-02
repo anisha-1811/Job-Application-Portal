@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getApplication } from "../services/api";
 import { analyzeSkillGap } from "../services/ai";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/shared/Navbar";
 
 // ── Progress Ring ─────────────────────────────────────────────────────────────
@@ -104,6 +105,7 @@ function LearningCard({ item, idx }) {
 
 export default function SkillGapPage() {
   const navigate = useNavigate();
+  const { tokenReady } = useAuth();
   const [profile, setProfile] = useState(null);
   const [targetRole, setTargetRole] = useState("");
   const [jobDesc, setJobDesc] = useState("");
@@ -114,10 +116,11 @@ export default function SkillGapPage() {
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 60);
+    if (!tokenReady) return;
     getApplication()
       .then(r => r.success && setProfile(r.data))
       .catch(() => {});
-  }, []);
+  }, [tokenReady]);
 
   const currentSkills = profile?.skillsList || [];
 
