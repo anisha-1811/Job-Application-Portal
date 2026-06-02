@@ -8,6 +8,7 @@ const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const api = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
+  timeout: 120000, // Render free tier cold start can take 60s
 });
 
 // ── Attach JWT token to every request automatically ───────────────────────────
