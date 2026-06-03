@@ -1,58 +1,77 @@
-# 🎓 Career Portal — Job Application Portal
+# 🎓 Career Portal — AI-Powered Job Application Platform
 
-A full-stack web application that lets candidates fill out, submit, and track their job applications through a clean multi-step form. Built with React, Node.js, Firebase Auth, and MySQL.
+A full-stack web application that helps candidates fill out, submit, and track job applications — enhanced with a suite of **AI-powered career tools** built on Google Gemini. From resume generation to mock interviews, the platform guides you through every step of the job hunt.
 
-🔗 **Live Demo:** [job-application-portal-alpha.vercel.app](https://job-application-portal-alpha.vercel.app/my-application)
+🔗 **Live Demo:** [job-application-portal-alpha.vercel.app](https://job-application-portal-alpha.vercel.app)
 
 ---
 
-## 📸 Features
+## ✨ Features
 
+### 📋 Core Application
 - 🔐 **Firebase Authentication** — Google/email login with JWT session management
-- 📋 **5-Step Application Form** — Personal info, Education, Experience, Documents, Review
+- 📝 **5-Step Application Form** — Personal Info → Education → Experience → Documents → Review
 - 💾 **Auto-save to MySQL** — All form data persisted to a cloud database (Railway)
 - 📊 **My Application Page** — View your full submitted application anytime
-- ✅ **Application Status Tracking** — Track status from Submitted → Under Review → Shortlisted → Selected
-- 📱 **Responsive Design** — Works on desktop and mobile
+- ✅ **Application Status Tracking** — `Submitted → Under Review → Shortlisted → Selected`
+- 🖥️ **User Dashboard** — Profile completeness tracker & application overview
+
+### 🤖 AI Career Tools (Powered by Gemini 2.0 Flash)
+- 📄 **AI Resume Generator** — Generates a structured, ATS-friendly resume from your profile data
+- 🎯 **ATS Score Checker** — Upload a PDF resume & job description to get a full compatibility report (with OCR fallback for scanned PDFs)
+- 💼 **Job Listings + AI Job Matching** — Browse openings and get AI-powered match scores for each role
+- 📬 **Cover Letter Generator** — Generates tailored cover letters in professional, friendly, or enthusiastic tones
+- 🔍 **Skill Gap Analyzer** — Identifies missing skills for a target role and suggests a learning path
+- 🎤 **Mock Interview Generator** — Produces role-specific interview questions with model answers and follow-ups
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-| Technology | Purpose |
-|---|---|
-| React 19 | UI framework |
-| React Router DOM v7 | Client-side routing |
-| Firebase v12 | Authentication (Google/Email) |
-| Axios | HTTP requests to backend |
-| React Hook Form | Form state management |
-| Lucide React | Icons |
-| Vercel | Deployment |
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 19 | UI framework |
+| React Router DOM | v7 | Client-side routing |
+| Firebase | v12 | Authentication (Google/Email) |
+| Axios | latest | HTTP requests to backend |
+| React Hook Form | v7 | Form state management |
+| Tailwind CSS | v3 | Utility-first styling |
+| jsPDF + html2canvas | latest | Client-side PDF export |
+| Lucide React | latest | Icons |
+| Vercel | — | Deployment |
 
 ### Backend
-| Technology | Purpose |
-|---|---|
-| Node.js + Express 5 | REST API server |
-| MySQL2 | Database driver |
-| JSON Web Token (JWT) | Session authentication |
-| bcryptjs | Password hashing |
-| dotenv | Environment variables |
-| Railway | MySQL database hosting |
-| Render | Backend deployment |
+| Technology | Version | Purpose |
+|---|---|---|
+| Node.js + Express | 5 | REST API server |
+| MySQL2 | latest | Database driver |
+| Google Generative AI | latest | Gemini 2.0 Flash for all AI features |
+| JSON Web Token (JWT) | latest | Session authentication |
+| bcryptjs | latest | Password hashing |
+| multer | latest | PDF file uploads |
+| pdf-parse | latest | Resume text extraction |
+| helmet | latest | HTTP security headers |
+| express-rate-limit | latest | API rate limiting |
+| Railway | — | MySQL database hosting |
+| Render | — | Backend deployment |
 
 ---
 
 ## 🗂️ Project Structure
 
 ```
-Job-Application-Portal/          # Frontend (React)
+Job-Application-Portal/           # Frontend (React)
 ├── src/
 │   ├── components/
+│   │   ├── ats/
+│   │   │   └── ATSScoreResult.jsx
 │   │   ├── auth/
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
 │   │   │   └── ProtectedRoute.jsx
+│   │   ├── resume/
+│   │   │   └── ResumePreview.jsx
 │   │   └── shared/
 │   │       ├── Navbar.jsx
 │   │       └── ProgressBar.jsx
@@ -60,26 +79,43 @@ Job-Application-Portal/          # Frontend (React)
 │   │   ├── HomePage.jsx
 │   │   ├── ApplicationPage.jsx
 │   │   ├── MyApplicationPage.jsx
-│   │   └── SuccessPage.jsx
+│   │   ├── SuccessPage.jsx
+│   │   ├── DashboardPage.jsx          # Profile completeness + tracker
+│   │   ├── ResumeGenerator.jsx        # AI Resume Generator
+│   │   ├── ATSScoreChecker.jsx        # ATS Score Checker
+│   │   ├── JobListingsPage.jsx        # Job board + AI matching
+│   │   ├── CoverLetterPage.jsx        # AI Cover Letter Generator
+│   │   ├── SkillGapPage.jsx           # Skill Gap Analyzer
+│   │   └── MockInterviewPage.jsx      # Mock Interview Generator
 │   ├── context/
-│   │   └── AuthContext.js        # Firebase + JWT auth state
+│   │   └── AuthContext.js             # Firebase + JWT auth state
+│   ├── hooks/
+│   │   └── useAI.js                   # Custom hooks for AI API calls
 │   ├── services/
-│   │   └── api.js                # Axios API calls
+│   │   ├── api.js                     # Application API calls
+│   │   ├── ai.js                      # AI feature API calls
+│   │   └── jobs.js                    # Job listings API calls
+│   ├── utils/
+│   │   ├── aiHelpers.js
+│   │   └── pdfExport.js
 │   └── firebase/
-│       └── config.js             # Firebase config
+│       └── config.js                  # Firebase config
 │
-job-portal-backend/              # Backend (Node.js)
+job-portal-backend/               # Backend (Node.js)
 ├── controllers/
-│   ├── authController.js         # Login/register logic
-│   └── applicationController.js  # Save & get application
+│   ├── authController.js              # Login/register logic
+│   ├── applicationController.js       # Save & fetch application
+│   └── jobsController.js              # Job listings CRUD
 ├── routes/
 │   ├── auth.js
-│   └── application.js
+│   ├── application.js
+│   ├── jobs.js
+│   └── ai.js                          # All Gemini AI endpoints
 ├── middleware/
-│   └── verifyToken.js            # JWT verification
+│   └── verifyToken.js                 # JWT verification
 ├── config/
-│   └── db.js                     # MySQL connection pool
-└── server.js                     # Express app entry point
+│   └── db.js                          # MySQL connection pool
+└── server.js                          # Express entry point
 ```
 
 ---
@@ -90,7 +126,7 @@ The MySQL database (`job_portal`) contains the following tables:
 
 | Table | Description |
 |---|---|
-| `applicants` | Core user table — stores Firebase UID, email, applicant ID |
+| `applicants` | Core user table — Firebase UID, email, applicant ID |
 | `personal_info` | Name, DOB, gender, phone, address |
 | `qualifications` | Class X, XII, degrees with grades and years |
 | `skills` | List of technical skills |
@@ -110,13 +146,17 @@ The MySQL database (`job_portal`) contains the following tables:
 - Node.js v18+
 - MySQL (local) or Railway MySQL account
 - Firebase project with Authentication enabled
+- Google Gemini API key (for AI features)
 
 ---
 
 ### 1. Clone the repositories
 
 ```bash
+# Frontend
 git clone https://github.com/anisha-1811/Job-Application-Portal.git
+
+# Backend
 git clone https://github.com/anisha-1811/job-portal-backend.git
 ```
 
@@ -129,7 +169,7 @@ cd job-portal-backend
 npm install
 ```
 
-Create a `.env` file in the root:
+Create a `.env` file:
 
 ```env
 DB_HOST=your_railway_mysql_host
@@ -138,14 +178,16 @@ DB_USER=your_db_username
 DB_PASSWORD=your_db_password
 DB_NAME=job_portal
 JWT_SECRET=your_secret_key_here
+GEMINI_API_KEY=your_gemini_api_key
+FRONTEND_URL=http://localhost:3000
 PORT=5000
 ```
 
 Start the server:
 
 ```bash
-npm run dev       # development (nodemon)
-npm start         # production
+npm run dev     # development (nodemon)
+npm start       # production
 ```
 
 Server runs at `http://localhost:5000`
@@ -159,7 +201,7 @@ cd Job-Application-Portal
 npm install
 ```
 
-Create a `.env` file in the root:
+Create a `.env` file:
 
 ```env
 REACT_APP_API_URL=http://localhost:5000
@@ -183,7 +225,7 @@ App runs at `http://localhost:3000`
 
 ### 4. Database Setup
 
-Run this on your MySQL database to add the required column if it doesn't exist:
+Run this migration on your MySQL instance if upgrading from an earlier version:
 
 ```sql
 ALTER TABLE qualifications
@@ -226,8 +268,29 @@ All routes require `Authorization: Bearer <token>` header.
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/application/save` | Save/update full application |
+| POST | `/api/application/save` | Save / update full application |
 | GET | `/api/application/get` | Fetch saved application data |
+
+---
+
+### Jobs
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/jobs` | List all jobs (supports filters) |
+| GET | `/api/jobs/filters` | Return available filter options |
+| GET | `/api/jobs/:id` | Get single job detail |
+
+---
+
+### AI (all require auth)
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/ai/generate-resume` | Generate ATS-friendly resume JSON from profile |
+| POST | `/api/ai/ats-score` | Score a resume PDF against a job description (multipart) |
+| POST | `/api/ai/job-match` | Score candidate profile against a list of job listings |
+| POST | `/api/ai/cover-letter` | Generate a tailored cover letter |
+| POST | `/api/ai/skill-gap` | Analyse skill gaps for a target role |
+| POST | `/api/ai/mock-interview` | Generate interview questions with model answers |
 
 ---
 
@@ -249,34 +312,43 @@ verifyToken middleware validates JWT on protected routes
 
 ---
 
-## ☁️ Deployment
-
-### Frontend — Vercel
-1. Push to GitHub
-2. Import repo on [vercel.com](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Vercel auto-deploys on every `git push`
-
-### Backend — Render
-1. Push to GitHub
-2. Create a new **Web Service** on [render.com](https://render.com)
-3. Set build command: `npm install`
-4. Set start command: `node server.js`
-5. Add environment variables in Render dashboard
-
-### Database — Railway
-1. Create a new MySQL service on [railway.app](https://railway.app)
-2. Copy connection credentials to backend `.env`
-3. Run schema SQL to create all tables
-
----
-
 ## 📋 Application Status Flow
 
 ```
 draft → submitted → under_review → shortlisted → selected
                                                → rejected
 ```
+
+---
+
+## 🛡️ Security & Performance
+
+- **Helmet.js** — sets secure HTTP headers on every response
+- **Rate limiting** — auth routes: 20 req/15 min; general API: 200 req/15 min; AI routes: 50 req/min
+- **CORS whitelist** — only the deployed frontend and localhost are permitted
+- **Keep-alive ping** — backend self-pings every 14 minutes to prevent Render free-tier cold starts
+
+---
+
+## ☁️ Deployment
+
+### Frontend — Vercel
+1. Push to GitHub
+2. Import repo on [vercel.com](https://vercel.com)
+3. Add all `REACT_APP_*` environment variables in the Vercel dashboard
+4. Vercel auto-deploys on every `git push`
+
+### Backend — Render
+1. Push to GitHub
+2. Create a new **Web Service** on [render.com](https://render.com)
+3. Build command: `npm install`
+4. Start command: `node server.js`
+5. Add all backend environment variables (including `GEMINI_API_KEY`) in the Render dashboard
+
+### Database — Railway
+1. Create a new MySQL service on [railway.app](https://railway.app)
+2. Copy the connection credentials into your backend `.env`
+3. Run the schema SQL to create all tables and apply any migrations
 
 ---
 
