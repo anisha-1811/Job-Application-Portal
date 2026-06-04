@@ -18,7 +18,7 @@ export default function Login() {
     setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/apply");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Invalid email or password. Please try again.");
@@ -28,7 +28,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/apply");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Google login failed. Please try again.");
