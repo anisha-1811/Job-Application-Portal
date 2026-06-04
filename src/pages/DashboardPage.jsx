@@ -1,6 +1,6 @@
 // src/pages/DashboardPage.jsx — Phase 5: User Dashboard + Application Tracker
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getApplication } from "../services/api";
 import Navbar from "../components/shared/Navbar";
@@ -225,10 +225,12 @@ function ProgressRing({ pct, size = 80, stroke = 7, color = "#6366f1" }) {
 export default function DashboardPage() {
   const { currentUser, tokenReady } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [appData, setAppData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // eslint-disable-line no-unused-vars
   const [visible, setVisible] = useState(false);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 60);
@@ -241,6 +243,16 @@ export default function DashboardPage() {
       .catch(() => setError("Could not load your profile."))
       .finally(() => setLoading(false));
   }, [tokenReady]);
+
+  // Show toast passed via navigation state (e.g. from ApplicationPage redirect)
+  useEffect(() => {
+    if (location.state?.toast) {
+      setToast(location.state.toast);
+      window.history.replaceState({}, document.title); // clear state so it won't re-show on refresh
+      const t = setTimeout(() => setToast(null), 4000);
+      return () => clearTimeout(t);
+    }
+  }, [location.state]);
 
   const userName =
     appData?.first_name
@@ -329,6 +341,20 @@ export default function DashboardPage() {
           </div>
         </div>
 
+      {/* ── Toast ── */}
+      {toast && (
+        <div style={{
+          position: "fixed", top: 80, left: "50%", transform: "translateX(-50%)",
+          background: "#fef3c7", color: "#92400e",
+          border: "1px solid #fbbf24", borderRadius: 12,
+          padding: "12px 28px", fontSize: 14, fontWeight: 600,
+          zIndex: 9999, boxShadow: "0 4px 20px rgba(0,0,0,.12)",
+          fontFamily: "'Plus Jakarta Sans', sans-serif", whiteSpace: "nowrap",
+        }}>
+          ⚠️ {toast}
+        </div>
+      )}
+
         {loading && (
           <div style={{ textAlign: "center", padding: 60, color: "#6b7280" }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>⏳</div>
@@ -338,6 +364,57 @@ export default function DashboardPage() {
 
         {!loading && (
           <>
+            {/* ── Edit Application Banner ── */}
+            {appData?.application_code && (
+              <div style={{
+                background: "#fff",
+                border: "1.5px solid #6366f1",
+                borderRadius: 16,
+                padding: "18px 24px",
+                marginBottom: 24,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 16,
+                flexWrap: "wrap",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12,
+                    background: "#ede9fe",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 22, flexShrink: 0,
+                  }}>✅</div>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 800, color: "#111827" }}>
+                      Application submitted
+                    </div>
+                    <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>
+                      ID: <span style={{ fontFamily: "monospace", fontWeight: 700, color: "#6366f1" }}>
+                        {appData.application_code}
+                      </span>
+                      {appData.submitted_at && (
+                        <span style={{ marginLeft: 10 }}>
+                          · {new Date(appData.submitted_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate("/apply?edit=1")}
+                  style={{
+                    background: "linear-gradient(135deg, #1a237e, #3949ab)",
+                    color: "#fff", border: "none", borderRadius: 10,
+                    padding: "10px 22px", fontSize: 13, fontWeight: 700,
+                    cursor: "pointer", whiteSpace: "nowrap",
+                  }}
+                >
+                  ✏️ Edit Application
+                </button>
+              </div>
+            )}
+
             {/* ── Stats Row ── */}
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
               <StatCard icon="💡" value={skillCount} label="Skills Listed"
