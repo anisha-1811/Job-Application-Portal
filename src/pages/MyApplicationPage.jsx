@@ -5,16 +5,15 @@ import Navbar from "../components/shared/Navbar";
 import "./MyApplicationPage.css";
 
 export default function MyApplicationPage() {
-  const navigate       = useNavigate();
-  const [appData,  setAppData]  = useState(null);
-  const [loading,  setLoading]  = useState(true);
+  const navigate = useNavigate();
+  const [appData, setAppData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApp = async () => {
       try {
         const token = localStorage.getItem("jp_token");
         if (!token) { navigate("/login"); return; }
-
         const result = await getApplication();
         if (result.success && result.data?.application_code) {
           setAppData(result.data);
@@ -50,66 +49,112 @@ export default function MyApplicationPage() {
   };
   const st = STATUS_COLORS[appData.final_status] || STATUS_COLORS.submitted;
 
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+  const dash = (v) => v || "—";
+
+  const fmtDate = (iso) => {
+    if (!iso) return "—";
+    try {
+      return new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+    } catch { return iso; }
+  };
+
+  // ── Build sections ──────────────────────────────────────────────────────────
+
+  const personalRows = [
+    ["Full Name",    dash(`${appData.first_name || ""} ${appData.last_name || ""}`.trim())],
+    ["Date of Birth", fmtDate(appData.date_of_birth)],
+    ["Gender",       dash(appData.gender)],
+    ["Phone",        dash(appData.phone)],
+    ["Address",      [appData.address, appData.city, appData.state, appData.pincode].filter(Boolean).join(", ") || "—"],
+    ["Nationality",  dash(appData.nationality)],
+  ];
+
+  const schoolRows = [
+    ["Class XII", `${dash(appData.twelfth_board)} — ${dash(appData.twelfth_marks)} (${dash(appData.twelfth_year)})`],
+    ["Class X",   `${dash(appData.tenth_board)}   — ${dash(appData.tenth_marks)}   (${dash(appData.tenth_year)})`],
+  ];
+
+  const degreeRows = Array.isArray(appData.degrees) && appData.degrees.length > 0
+    ? appData.degrees.map((d, i) => [
+        `Degree ${i + 1}`,
+        `${dash(d.degree)} in ${dash(d.branch)} — ${dash(d.institution)} | CGPA: ${dash(d.cgpa)} | Year: ${dash(d.passingYear)}`,
+      ])
+    : [["Degrees", "—"]];
+
+  const skillsRows = [[
+    "Technical Skills",
+    Array.isArray(appData.skillsList) && appData.skillsList.length > 0
+      ? appData.skillsList.join(", ")
+      : "—",
+  ]];
+
+  const expRows = Array.isArray(appData.experiences) && appData.experiences.length > 0
+    ? appData.experiences.map((e, i) => [
+        `Experience ${i + 1}`,
+        [
+          `${dash(e.company || e.company_name)} — ${dash(e.role)}`,
+          `${e.start_date || e.startDate || ""} to ${e.currently_working || e.currentlyWorking ? "Present" : (e.end_date || e.endDate || "")}`,
+          e.description || e.skills_learned ? `${e.description || ""} ${e.skills_learned ? "| Skills: " + e.skills_learned : ""}`.trim() : "",
+        ].filter(Boolean).join("\n"),
+      ])
+    : [["Work Experience", "Fresher / Not added"]];
+
+  const internRows = Array.isArray(appData.internshipsList) && appData.internshipsList.length > 0
+    ? appData.internshipsList.map((i, idx) => [
+        `Internship ${idx + 1}`,
+        [
+          `${dash(i.organisation || i.company)} — ${dash(i.role)}`,
+          `${i.start_date || i.startDate || ""} to ${i.currently_interning || i.currentlyWorking ? "Present" : (i.end_date || i.endDate || "")}`,
+          i.description || "",
+        ].filter(Boolean).join("\n"),
+      ])
+    : [["Internships", "—"]];
+
+  const projectRows = Array.isArray(appData.projectsList) && appData.projectsList.length > 0
+    ? appData.projectsList.map((p, i) => [
+        `Project ${i + 1}`,
+        [
+          dash(p.title),
+          p.description || "",
+          p.tech_skills || p.techSkills ? `Tech: ${p.tech_skills || p.techSkills}` : "",
+          p.project_url || p.url ? `URL: ${p.project_url || p.url}` : "",
+          p.is_ongoing || p.ongoing ? "(Ongoing)" : "",
+        ].filter(Boolean).join("\n"),
+      ])
+    : [["Projects", "—"]];
+
+  const certRows = Array.isArray(appData.certsList) && appData.certsList.length > 0
+    ? appData.certsList.map((c, i) => [
+        `Certificate ${i + 1}`,
+        `${dash(c.cert_name || c.name)} — ${dash(c.issuing_org || c.issuer)}${c.date_issued || c.date ? " (" + (c.date_issued || c.date) + ")" : ""}${c.credential_url || c.credentialUrl ? " | " + (c.credential_url || c.credentialUrl) : ""}`,
+      ])
+    : [["Certifications", "—"]];
+
+  const linkRows = Array.isArray(appData.profileLinks) && appData.profileLinks.length > 0
+    ? appData.profileLinks.map((l, i) => [
+        l.platform_name || l.label || `Link ${i + 1}`,
+        l.profile_url || l.url || "—",
+      ])
+    : [["Profile Links", "—"]];
+
+  const docRows = [
+    ["Resume",   dash(appData.resume_filename)],
+    ["Photo",    dash(appData.photo_filename)],
+    ["ID Proof", dash(appData.id_proof_filename)],
+  ];
+
   const sections = [
-    {
-      title: "👤 Personal Information",
-      rows: [
-        ["Full Name",    `${appData.first_name || ""} ${appData.last_name || ""}`.trim()],
-        ["Date of Birth",
-  appData.date_of_birth
-    ? new Date(appData.date_of_birth).toLocaleDateString('en-IN', {
-        day: '2-digit', month: 'long', year: 'numeric'
-      })
-    : "—"
-],
-        ["Gender",       appData.gender        || "—"],
-        ["Phone",        appData.phone         || "—"],
-        ["City / State", `${appData.city || ""}, ${appData.state || ""}`],
-        ["Pincode",      appData.pincode       || "—"],
-        ["Nationality",  appData.nationality   || "—"],
-      ]
-    },
-    {
-      title: "🏫 School Records",
-      rows: [
-        ["Class XII", `${appData.twelfth_board || "—"} — ${appData.twelfth_marks || "—"} (${appData.twelfth_year || "—"})`],
-        ["Class X",   `${appData.tenth_board   || "—"} — ${appData.tenth_marks   || "—"} (${appData.tenth_year   || "—"})`],
-      ]
-    },
-    {
-      title: "🎓 Degrees",
-      rows: Array.isArray(appData.degrees) && appData.degrees.length > 0
-        ? appData.degrees.map(d => [
-            `Degree ${d.degreeOrder}`,
-  `${d.degree} in ${d.branch} — ${d.institution} | CGPA: ${d.cgpa} | Year: ${d.passingYear}`
-          ])
-        : [["Degrees", "—"]]
-    },
-    {
-      title: "⚡ Skills",
-      rows: [["Technical Skills",
-        Array.isArray(appData.skillsList) && appData.skillsList.length > 0
-          ? appData.skillsList.join(", ")
-          : "—"
-      ]]
-    },
-    {
-      title: "🚀 Projects",
-      rows: Array.isArray(appData.projectsList) && appData.projectsList.length > 0
-        ? appData.projectsList.map(p => [
-            p.title || "Project",
-            `${p.description || ""} ${p.project_url ? "| " + p.project_url : ""} ${p.is_ongoing ? "(Ongoing)" : ""}`
-          ])
-        : [["Projects", "—"]]
-    },
-    {
-      title: "📎 Documents",
-      rows: [
-        ["Resume",   appData.resume_filename   || "—"],
-        ["Photo",    appData.photo_filename    || "—"],
-        ["ID Proof", appData.id_proof_filename || "—"],
-      ]
-    },
+    { title: "👤 Personal Information",     rows: personalRows },
+    { title: "🏫 School Records",            rows: schoolRows   },
+    { title: "🎓 Degrees",                   rows: degreeRows   },
+    { title: "⚡ Skills",                    rows: skillsRows   },
+    { title: "💼 Work Experience",           rows: expRows      },
+    { title: "🏢 Internships",               rows: internRows   },
+    { title: "🚀 Projects",                  rows: projectRows  },
+    { title: "🏆 Certifications",            rows: certRows     },
+    { title: "🔗 Profile Links",             rows: linkRows     },
+    { title: "📎 Documents",                 rows: docRows      },
   ];
 
   return (
@@ -117,7 +162,6 @@ export default function MyApplicationPage() {
       <Navbar />
       <div className="myapp-page">
 
-        {/* Header */}
         <div className="myapp-header">
           <h1>My Application</h1>
           <p>Your submitted application details are shown below.</p>
@@ -128,27 +172,20 @@ export default function MyApplicationPage() {
           <div className="myapp-status-left">
             <div className="myapp-app-id">
               <span className="myapp-app-id-label">Application ID</span>
-              <span className="myapp-app-id-value">
-                {appData.application_code}
-              </span>
+              <span className="myapp-app-id-value">{appData.application_code}</span>
             </div>
             <div className="myapp-email">📧 {appData.email}</div>
             <div className="myapp-date">
               🕐 Submitted:{" "}
-              {appData.submitted_at
-                ? new Date(appData.submitted_at).toLocaleString()
-                : "—"}
+              {appData.submitted_at ? new Date(appData.submitted_at).toLocaleString() : "—"}
             </div>
           </div>
-          <div
-            className="myapp-status-badge"
-            style={{ background: st.bg, color: st.color }}
-          >
+          <div className="myapp-status-badge" style={{ background: st.bg, color: st.color }}>
             {st.label}
           </div>
         </div>
 
-        {/* Review sections */}
+        {/* All sections */}
         {sections.map(sec => (
           <div className="myapp-section" key={sec.title}>
             <div className="myapp-section-title">{sec.title}</div>
@@ -158,9 +195,7 @@ export default function MyApplicationPage() {
                   <tr key={label}>
                     <td className="myapp-td-label">{label}</td>
                     <td className="myapp-td-value">
-                      <span style={{ whiteSpace: "pre-wrap" }}>
-                        {value || "—"}
-                      </span>
+                      <span style={{ whiteSpace: "pre-wrap" }}>{value || "—"}</span>
                     </td>
                   </tr>
                 ))}
@@ -169,7 +204,6 @@ export default function MyApplicationPage() {
           </div>
         ))}
 
-        {/* Reviewer notes */}
         {appData.reviewer_notes && (
           <div className="myapp-notes">
             <div className="myapp-notes-title">📝 Reviewer Notes</div>
@@ -177,11 +211,8 @@ export default function MyApplicationPage() {
           </div>
         )}
 
-        <button
-          className="myapp-back-btn"
-          onClick={() => navigate("/")}
-        >
-          ← Back to Home
+        <button className="myapp-back-btn" onClick={() => navigate("/dashboard")}>
+          ← Back to Dashboard
         </button>
 
       </div>
