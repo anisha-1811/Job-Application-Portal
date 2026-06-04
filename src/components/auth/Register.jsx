@@ -49,7 +49,7 @@ export default function Register() {
         displayName: form.name
       });
 
-      navigate("/apply");
+      navigate("/dashboard");
 
     } catch (err) {
       console.error("Register Error:", err);
