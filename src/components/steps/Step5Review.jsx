@@ -33,9 +33,9 @@ export default function Step5Review({ data, onBack }) {
         nationality:     data.nationality || "",
         // Step 2
         degrees:         data.degrees         || [],
-        twelthBoard:     data.twelthBoard     || "",
-        twelthMarks:     data.twelthMarks     || "",
-        twelthYear:      data.twelthYear      || "",
+        twelfthBoard:    data.twelfthBoard    || "",
+        twelfthMarks:    data.twelfthMarks    || "",
+        twelfthYear:     data.twelfthYear     || "",
         tenthBoard:      data.tenthBoard      || "",
         tenthMarks:      data.tenthMarks      || "",
         tenthYear:       data.tenthYear       || "",
@@ -48,9 +48,9 @@ export default function Step5Review({ data, onBack }) {
         certsList:       data.certsList       || [],
         profileLinks:    data.profileLinks    || [],
         // Step 4
-        resumeLink:      data.resumeLink      || "",
-        photoLink:       data.photoLink       || "",
-        idProofLink:     data.idProofLink     || "",
+        resumeLink:      data.resumeLink  || (data.resume?.name  ? "[File] " + data.resume.name  : ""),
+        photoLink:       data.photoLink   || (data.photo?.name   ? "[File] " + data.photo.name   : ""),
+        idProofLink:     data.idProofLink || (data.idProof?.name ? "[File] " + data.idProof.name : ""),
       };
 
       const result = await submitApplication(payload);
@@ -130,7 +130,7 @@ export default function Step5Review({ data, onBack }) {
       title: "🎓 Educational Qualifications",
       rows: [
         ["Degrees",            degreeText],
-        ["Class XII",          `${val(data.twelthBoard)} — ${val(data.twelthMarks)} (${val(data.twelthYear)})`],
+        ["Class XII",          `${val(data.twelfthBoard)} — ${val(data.twelfthMarks)} (${val(data.twelfthYear)})`],
         ["Class X",            `${val(data.tenthBoard)} — ${val(data.tenthMarks)} (${val(data.tenthYear)})`],
         ["School Gap Reason",  data.schoolGapReason || "None"],
       ]
@@ -149,9 +149,9 @@ export default function Step5Review({ data, onBack }) {
     {
       title: "📎 Documents",
       rows: [
-        ["Resume Link",   data.resumeLink  || "—"],
-        ["Photo Link",    data.photoLink   || "—"],
-        ["ID Proof Link", data.idProofLink || "—"],
+        ["Resume",   data.resumeLink  || (data.resume?.name  ? "[File] " + data.resume.name  : "—")],
+        ["Photo",    data.photoLink   || (data.photo?.name   ? "[File] " + data.photo.name   : "—")],
+        ["ID Proof", data.idProofLink || (data.idProof?.name ? "[File] " + data.idProof.name : "—")],
       ]
     },
   ];
