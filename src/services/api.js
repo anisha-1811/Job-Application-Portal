@@ -36,6 +36,25 @@ export const submitApplication = async (formData) => {
   return res.data;
 };
 
+// Upload resume, photo, idProof as actual files
+// filesToUpload = { resume: FileObj, photo: FileObj, idProof: FileObj }
+// Only include keys whose value is a real File object
+export const uploadDocuments = async (filesToUpload) => {
+  const form = new FormData();
+  let hasFile = false;
+  Object.entries(filesToUpload).forEach(([key, file]) => {
+    if (file instanceof File) {
+      form.append(key, file);
+      hasFile = true;
+    }
+  });
+  if (!hasFile) return { success: true, message: "No new files to upload." };
+  const res = await api.post("/api/application/upload-documents", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
 export const getApplication = async () => {
   const res = await api.get("/api/application/get");
   return res.data;
