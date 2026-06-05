@@ -78,12 +78,12 @@ function getYearWarning(degrees, index) {
   }
 
   // ✅ Check against Class 12 passing year
-  const twYear = parseInt(degrees._twelthYear, 10);
+  const twYear = parseInt(degrees._twelfthYear, 10);
 
   if (
     !isNaN(twYear) &&
-    degrees._twelthYear &&
-    degrees._twelthYear.toString().length === 4 &&
+    degrees._twelfthYear &&
+    degrees._twelfthYear.toString().length === 4 &&
     index === 0
   ) {
     const gap = curYear - twYear;
@@ -107,16 +107,16 @@ function getYearWarning(degrees, index) {
 } 
 function getTenthTwelfthWarning(data) {
   const tenthYear = data.tenthYear;
-  const twelthYear = data.twelthYear;
+  const twelfthYear = data.twelfthYear;
 
   // ✅ ONLY validate when both years are exactly 4 digits
   if (
     !tenthYear || tenthYear.toString().length !== 4 ||
-    !twelthYear || twelthYear.toString().length !== 4
+    !twelfthYear || twelfthYear.toString().length !== 4
   ) return "";
 
   const y10 = parseInt(tenthYear, 10);
-  const y12 = parseInt(twelthYear, 10);
+  const y12 = parseInt(twelfthYear, 10);
 
   if (isNaN(y10) || isNaN(y12)) return "";
 
@@ -172,7 +172,7 @@ export default function Step2Education({ data, update, onNext, onBack }) {
 
   // Attach Class XII year to degrees array so warning fn can access it
   const degreesWithRef = Object.assign([...degrees], {
-    _twelthYear: data.twelthYear || ""
+    _twelfthYear: data.twelfthYear || ""
   });
 
   const handleSubmit = (e) => {
@@ -194,7 +194,7 @@ export default function Step2Education({ data, update, onNext, onBack }) {
     }
 
     // Class X / XII validation
-    if (!data.twelthBoard || !data.twelthMarks || !data.twelthYear) {
+    if (!data.twelfthBoard || !data.twelfthMarks || !data.twelfthYear) {
       alert("Please fill all Class XII fields."); return;
     }
     if (!data.tenthBoard || !data.tenthMarks || !data.tenthYear) {
@@ -336,7 +336,7 @@ export default function Step2Education({ data, update, onNext, onBack }) {
                           deg.passingYear && parseInt(deg.passingYear) < (
                             index > 0
                               ? parseInt(degrees[index - 1]?.passingYear || 0)
-                              : parseInt(data.twelthYear || 0)
+                              : parseInt(data.twelfthYear || 0)
                           )
                             ? "e.g. I completed Class XII in a different year due to medical reasons..."
                             : "e.g. I took a gap year to prepare for entrance exams / worked at a company / had health issues / appeared for competitive exams multiple times..."
@@ -397,8 +397,8 @@ export default function Step2Education({ data, update, onNext, onBack }) {
         <div className="form-group">
           <label>Board *</label>
           <input
-            name="twelthBoard"
-            value={data.twelthBoard || ""}
+            name="twelfthBoard"
+            value={data.twelfthBoard || ""}
             onChange={handle}
             placeholder="CBSE / ICSE / State Board"
             required
@@ -407,8 +407,8 @@ export default function Step2Education({ data, update, onNext, onBack }) {
         <div className="form-group">
           <label>Marks / Percentage *</label>
           <input
-            name="twelthMarks"
-            value={data.twelthMarks || ""}
+            name="twelfthMarks"
+            value={data.twelfthMarks || ""}
             onChange={handle}
             placeholder="e.g. 92%"
             required
@@ -418,8 +418,8 @@ export default function Step2Education({ data, update, onNext, onBack }) {
           <label>Passing Year *</label>
           <input
             type="number"
-            name="twelthYear"
-            value={data.twelthYear || ""}
+            name="twelfthYear"
+            value={data.twelfthYear || ""}
             onChange={handle}
             placeholder="e.g. 2021"
             min="2000"
