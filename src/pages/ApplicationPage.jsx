@@ -76,12 +76,73 @@ function mapApiToForm(data) {
     tenthYear:      data.tenth_year     || "",
     schoolGapReason: data.school_gap_reason || "",
 
-    skillsList:     Array.isArray(data.skillsList)     ? data.skillsList     : [],
-    experiences:    Array.isArray(data.experiences)    ? data.experiences    : [],
-    internshipsList:Array.isArray(data.internshipsList)? data.internshipsList: [],
-    projectsList:   Array.isArray(data.projectsList)   ? data.projectsList   : [],
-    certsList:      Array.isArray(data.certsList)      ? data.certsList      : [],
-    profileLinks:   Array.isArray(data.profileLinks)   ? data.profileLinks   : [],
+    skillsList: Array.isArray(data.skillsList) ? data.skillsList : [],
+
+    // Normalize DB field names → frontend field names, and add id for .map() keys
+    experiences: Array.isArray(data.experiences)
+      ? data.experiences.map(e => ({
+          id:             e.id || Date.now() + Math.random(),
+          company:        e.company_name  || e.company  || "",
+          role:           e.role          || "",
+          startDate:      e.start_date    || e.startDate || "",
+          endDate:        e.end_date      || e.endDate   || "",
+          currentlyWorking: !!(e.currently_working || e.currentlyWorking),
+          skillsLearned:  e.skills_learned
+                            ? e.skills_learned.split(",").map(s => s.trim()).filter(Boolean)
+                            : (Array.isArray(e.skillsLearned) ? e.skillsLearned : []),
+          description:    e.description   || "",
+        }))
+      : [],
+
+    internshipsList: Array.isArray(data.internshipsList)
+      ? data.internshipsList.map(i => ({
+          id:             i.id || Date.now() + Math.random(),
+          company:        i.organisation   || i.company || "",
+          role:           i.role           || "",
+          startDate:      i.start_date     || i.startDate || "",
+          endDate:        i.end_date       || i.endDate   || "",
+          currentlyWorking: !!(i.currently_interning || i.currentlyWorking),
+          skillsLearned:  i.skills_learned
+                            ? i.skills_learned.split(",").map(s => s.trim()).filter(Boolean)
+                            : (Array.isArray(i.skillsLearned) ? i.skillsLearned : []),
+          description:    i.description   || "",
+        }))
+      : [],
+
+    projectsList: Array.isArray(data.projectsList)
+      ? data.projectsList.map(p => ({
+          id:          p.id || Date.now() + Math.random(),
+          title:       p.title       || "",
+          url:         p.project_url || p.url || "",
+          description: p.description || "",
+          techSkills:  p.tech_skills
+                         ? p.tech_skills.split(",").map(s => s.trim()).filter(Boolean)
+                         : (Array.isArray(p.techSkills) ? p.techSkills : []),
+          startDate:   p.start_date  || p.startDate || "",
+          endDate:     p.end_date    || p.endDate   || "",
+          ongoing:     !!(p.is_ongoing || p.ongoing),
+        }))
+      : [],
+
+    certsList: Array.isArray(data.certsList)
+      ? data.certsList.map(c => ({
+          id:            c.id || Date.now() + Math.random(),
+          name:          c.cert_name   || c.name   || "",
+          issuer:        c.issuing_org || c.issuer || "",
+          credentialUrl: c.credential_url || c.credentialUrl || "",
+          date:          c.date_issued    || c.date          || "",
+        }))
+      : [],
+
+    profileLinks: Array.isArray(data.profileLinks)
+      ? data.profileLinks.map(l => ({
+          id:    l.id || Date.now() + Math.random(),
+          label: l.platform_name || l.label || "",
+          icon:  l.platform_icon || l.icon  || "🔗",
+          url:   l.profile_url   || l.url   || "",
+          placeholder: "https://",
+        }))
+      : [],
 
     resumeLink:     data.resume_filename   || "",
     photoLink:      data.photo_filename    || "",
