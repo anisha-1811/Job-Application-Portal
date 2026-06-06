@@ -30,6 +30,12 @@ export const loginToBackend = async (firebase_uid, email, display_name) => {
   return res.data;
 };
 
+// Login with API ID + password (no Firebase needed on the frontend for this flow)
+export const loginByApiId = async (applicant_id, password) => {
+  const res = await api.post("/api/auth/login-by-id", { applicant_id, password });
+  return res.data;
+};
+
 // ── APPLICATION ───────────────────────────────────────────────────────────────
 export const submitApplication = async (formData) => {
   const res = await api.post("/api/application/save", formData);
