@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { auth } from "../firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { loginToBackend } from "../services/api";
+import { loginToBackend, loginByApiId } from "../services/api";
 
 const AuthContext = createContext(null);
 
@@ -68,6 +68,21 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  // API ID + password login — bypasses Firebase on the frontend entirely.
+  // The backend verifies the password against Firebase REST API and returns a JWT.
+  const loginWithApiId = async (applicant_id, password) => {
+    const data = await loginByApiId(applicant_id, password);
+    if (data.success) {
+      localStorage.setItem("jp_token", data.token);
+      localStorage.setItem("jp_applicant_id", data.applicant_id);
+      setApplicantId(data.applicant_id);
+      setTokenReady(true);
+      // Note: currentUser stays null (no Firebase session) — that's intentional.
+      // All protected routes use jp_token, not Firebase currentUser.
+    }
+    return data;
+  };
+
   const logout = async () => {
     await signOut(auth);
 
@@ -101,7 +116,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, applicantId, tokenReady, logout }}>
+    <AuthContext.Provider value={{ currentUser, applicantId, tokenReady, logout, loginWithApiId }}>
       {children}
     </AuthContext.Provider>
   );
