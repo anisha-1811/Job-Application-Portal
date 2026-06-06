@@ -364,6 +364,37 @@ export default function DashboardPage() {
 
         {!loading && (
           <>
+            {/* ── API ID Card ── */}
+            {appData?.applicant_id && (
+              <div style={{
+                background: "linear-gradient(135deg, #1a237e 0%, #3949ab 100%)",
+                borderRadius: 16, padding: "16px 24px", marginBottom: 16,
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                flexWrap: "wrap", gap: 12,
+              }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.7)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                    Your API ID — use this to log in
+                  </div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: "#fff", fontFamily: "monospace", letterSpacing: "0.06em", marginTop: 4 }}>
+                    {appData.applicant_id}
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(appData.applicant_id);
+                  }}
+                  style={{
+                    background: "rgba(255,255,255,0.15)", border: "1.5px solid rgba(255,255,255,0.3)",
+                    color: "#fff", borderRadius: 8, padding: "8px 18px",
+                    fontSize: 13, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+                  }}
+                >
+                  📋 Copy ID
+                </button>
+              </div>
+            )}
+
             {/* ── Edit Application Banner ── */}
             {appData?.application_code && (
               <div style={{
