@@ -4,6 +4,72 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import "./Auth.css";
 
+function ApiIdModal({ apiId, onContinue }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(apiId);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)",
+      display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999,
+      padding: 20,
+    }}>
+      <div style={{
+        background: "#fff", borderRadius: 20, padding: "36px 32px",
+        maxWidth: 420, width: "100%", textAlign: "center",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+      }}>
+        <div style={{ fontSize: 48, marginBottom: 12 }}>🎉</div>
+        <h2 style={{ fontSize: 20, fontWeight: 800, color: "#111827", marginBottom: 8 }}>
+          Account Created!
+        </h2>
+        <p style={{ fontSize: 14, color: "#6b7280", marginBottom: 24, lineHeight: 1.6 }}>
+          This is your unique <strong>API ID</strong>. You can use it along with your password to log in anytime — even without your email.
+        </p>
+
+        <div style={{
+          background: "#f0f4ff", border: "2px dashed #6366f1",
+          borderRadius: 12, padding: "16px 20px", marginBottom: 20,
+        }}>
+          <div style={{ fontSize: 11, color: "#6366f1", fontWeight: 600, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            Your API ID
+          </div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: "#1a237e", fontFamily: "monospace", letterSpacing: "0.06em" }}>
+            {apiId}
+          </div>
+        </div>
+
+        <div style={{
+          background: "#fef3c7", border: "1px solid #fbbf24", borderRadius: 10,
+          padding: "10px 14px", marginBottom: 24, fontSize: 13, color: "#92400e", fontWeight: 600,
+        }}>
+          ⚠️ Save this ID somewhere safe — you'll need it to log in using the API ID option.
+        </div>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={copy} style={{
+            flex: 1, padding: "11px 0", borderRadius: 10, fontSize: 14, fontWeight: 600,
+            border: "1.5px solid #6366f1", background: "#fff", color: "#6366f1", cursor: "pointer",
+          }}>
+            {copied ? "✅ Copied!" : "📋 Copy ID"}
+          </button>
+          <button onClick={onContinue} style={{
+            flex: 1, padding: "11px 0", borderRadius: 10, fontSize: 14, fontWeight: 700,
+            border: "none", background: "linear-gradient(135deg, #1a237e, #3949ab)",
+            color: "#fff", cursor: "pointer",
+          }}>
+            Go to Dashboard →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Register() {
   const [form, setForm] = useState({
     name: "",
@@ -12,8 +78,9 @@ export default function Register() {
     confirm: ""
   });
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error,    setError]    = useState("");
+  const [loading,  setLoading]  = useState(false);
+  const [newApiId, setNewApiId] = useState(null); // shown in modal after registration
 
   const navigate = useNavigate();
 
@@ -45,11 +112,17 @@ export default function Register() {
         form.password
       );
 
-      await updateProfile(user, {
-        displayName: form.name
-      });
+      await updateProfile(user, { displayName: form.name });
 
-      navigate("/dashboard");
+      // Grab the API ID that AuthContext stores after onAuthStateChanged fires
+      // Give it a moment to write to localStorage
+      await new Promise(r => setTimeout(r, 1200));
+      const storedId = localStorage.getItem("jp_applicant_id");
+      if (storedId) {
+        setNewApiId(storedId);  // show modal — user clicks Continue to navigate
+      } else {
+        navigate("/dashboard"); // fallback if something was slow
+      }
 
     } catch (err) {
       console.error("Register Error:", err);
@@ -65,6 +138,10 @@ export default function Register() {
 
     setLoading(false);
   };
+
+  if (newApiId) {
+    return <ApiIdModal apiId={newApiId} onContinue={() => navigate("/dashboard")} />;
+  }
 
   return (
     <div className="auth-container">
