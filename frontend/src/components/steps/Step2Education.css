@@ -1,0 +1,179 @@
+/* =====================================================
+   Step2Education.css
+   ===================================================== */
+
+.edu-degrees-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+/* ── Degree card ── */
+.edu-degree-card {
+  border: 2px solid #1a237e;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.edu-degree-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+}
+
+/* Card flagged with a year gap */
+.edu-card-flagged {
+  border-color: #f59e0b !important;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.2);
+}
+
+/* ── Header ── */
+.edu-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+}
+.edu-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.edu-card-num {
+  width: 26px; height: 26px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.82rem; font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Remove button */
+.edu-remove-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  border-radius: 7px;
+  padding: 4px 12px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.edu-remove-btn:hover {
+  background: rgba(220,38,38,0.55);
+  border-color: transparent;
+}
+
+/* ── Body ── */
+.edu-card-body {
+  padding: 18px 20px 16px;
+}
+
+/* ── Gap warning block ── */
+.edu-gap-block {
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #f59e0b;
+  animation: gap-slide-in 0.3s ease both;
+}
+
+@keyframes gap-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.edu-gap-warning {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  padding: 12px 16px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #92400e;
+  line-height: 1.55;
+  border-bottom: 1px solid #fde68a;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.edu-gap-block .form-group {
+  background: #fffbeb;
+  padding: 12px 16px;
+}
+
+.edu-gap-label {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.77rem !important;
+  font-weight: 700 !important;
+  color: #92400e !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px !important;
+}
+
+.edu-gap-required {
+  background: #dc2626;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Add degree button ── */
+.edu-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: white;
+  border: 2.5px dashed #c7d2fe;
+  border-radius: 12px;
+  color: #1a237e;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.edu-add-btn:hover {
+  border-color: #1a237e;
+  background: #eef2ff;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.1);
+}
+.edu-add-icon {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.edu-add-hint {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #e8eaf6;
+  padding: 2px 9px;
+  border-radius: 50px;
+}
+
+/* Max notice */
+.edu-max-notice {
+  text-align: center;
+  padding: 12px;
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+  border-radius: 10px;
+  color: #15803d;
+  font-size: 0.87rem;
+  font-weight: 700;
+}
