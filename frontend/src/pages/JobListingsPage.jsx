@@ -303,7 +303,7 @@ export default function JobListingsPage() {
   };
 
   // ── AI Job Matching ────────────────────────────────────────────────────────
-  const handleAIMatch = async () => {
+    const handleAIMatch = async () => {
     setAiLoading(true);
     setAiError(null);
     try {
@@ -311,6 +311,18 @@ export default function JobListingsPage() {
       const profileRes = await getApplication();
       if (!profileRes?.success || !profileRes.data) {
         setAiError("Please complete your application profile first before running AI matching.");
+        return;
+      }
+
+      // 1b. Guard against an empty profile (new users) — running AI matching
+      // with nothing filled in just produces discouraging 0% scores everywhere.
+      const profile = profileRes.data;
+      const hasSkills = Array.isArray(profile.skillsList) && profile.skillsList.length > 0;
+      const hasExperience = Array.isArray(profile.experiences) && profile.experiences.length > 0;
+      const hasProjects = Array.isArray(profile.projectsList) && profile.projectsList.length > 0;
+
+      if (!hasSkills && !hasExperience && !hasProjects) {
+        setAiError("Add your skills, experience, or projects to your profile first so AI matching has something to work with.");
         return;
       }
 
