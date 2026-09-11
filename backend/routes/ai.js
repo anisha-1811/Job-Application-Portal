@@ -21,8 +21,22 @@ const upload = multer({
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// ✅ Retries Gemini calls on transient 503 "high demand" errors
+async function generateWithRetry(parts, retries = 2) {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      return await model.generateContent(parts);
+    } catch (e) {
+      const is503 = e.message?.includes("503") || e.message?.includes("overloaded");
+      if (i === retries || !is503) throw e;
+      console.log(`⏳ Gemini 503, retrying in ${1500 * (i + 1)}ms (attempt ${i + 1}/${retries})...`);
+      await new Promise((r) => setTimeout(r, 1500 * (i + 1))); // 1.5s, then 3s
+    }
+  }
+}
+
 async function callGemini(prompt) {
-  const result = await model.generateContent(prompt);
+  const result = await generateWithRetry(prompt);
   return result.response.text();
 }
 
@@ -78,7 +92,7 @@ async function extractTextFromPDF(buffer) {
   console.log("🔍 Running OCR via Gemini Vision...");
   try {
     const base64PDF = buffer.toString("base64");
-    const result = await model.generateContent([
+    const result = await generateWithRetry([
       {
         inlineData: {
           mimeType: "application/pdf",
